@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext } from "react";
+import AppRoutes from "./AppRoutes";
+import { lightTheme, darkTheme } from './styles/theme';
+import GlobalStyle from './styles/global.styles';
+import { ThemeProviderContext } from "./styles/ThemeProvider.context";
+import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
 
-function App() {
+const App = () => {
+  const { theme } = useContext(ThemeProviderContext);
+  console.log("theme", theme);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StyledComponentsThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+      <GlobalStyle />
+      <AppRoutes />
+    </StyledComponentsThemeProvider>
   );
-}
+};
 
 export default App;
