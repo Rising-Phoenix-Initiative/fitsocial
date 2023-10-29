@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Logo from '../../../components/logo/logo.component';
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -8,11 +9,6 @@ const HeaderContainer = styled.header`
   align-items: center;
   padding: 1rem 10%;
   background-color: ${props => props.theme.colors.background};
-`;
-
-const Logo = styled.div`
-  font-size: 1.5em;
-  // Add additional styling for your logo
 `;
 
 const Navigation = styled.nav`
@@ -33,7 +29,7 @@ const Navigation = styled.nav`
 
 const Header = () => (
     <HeaderContainer>
-        <Logo>Fitsocial</Logo>
+        <Logo />
         <Navigation>
             <ul>
                 <li><Link to="/login">Login</Link></li>

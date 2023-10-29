@@ -1,4 +1,7 @@
 const sharedTheme = {
+    brand: {
+        primary: '#04ED04',
+    },
     fonts: {
         primary: '"Helvetica Neue", Helvetica, Arial, sans-serif',
         secondary: 'Georgia, "Times New Roman", Times, serif',
