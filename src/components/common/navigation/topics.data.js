@@ -1,0 +1,22 @@
+export const topics = [
+    'cardio workouts',
+    'crossfit',
+    'bodybuilding',
+    'pilates',
+    'martial arts',
+    'dance fitness',
+    'swimming',
+    'mental health',
+    'vegan/vegetarian nutrition',
+    'cycling',
+    'hiking and outdoors',
+    'functional training',
+    'calisthenics',
+    'recovery and rehabilitation',
+    'senior fitness',
+    'children\'s fitness',
+    'sports training',
+    'supplements and nutrition',
+    'hydration and diets',
+    'flexibility and mobility'
+];

@@ -1,49 +1,99 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContainer, Button, Form, Input } from '../auth.styles';
+import * as React from 'react';
+import { Button, TextField, Box, Typography, FormControl, InputAdornment, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Login = () => {
-    const [credentials, setCredentials] = useState({ email: '', password: '' });
-    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = React.useState(false);
 
-    const handleChange = (e) => {
-        setCredentials({
-            ...credentials,
-            [e.target.name]: e.target.value,
-        });
+    const handleClickShowPassword = () => {
+        setShowPassword((prevShowPassword) => !prevShowPassword);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Authentication logic here (e.g., make an API call to validate the user)
-        // On success:
-        navigate('/home'); // or wherever your main app view is located
-    };
+    const validationSchema = Yup.object({
+        email: Yup.string().email('Invalid email format').required('Required'),
+        password: Yup.string().required('No password provided.'),
+    });
+
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            alert(JSON.stringify(values, null, 2));
+        },
+    });
 
     return (
-        <AuthContainer>
-            <h2>Login</h2>
-            <Form onSubmit={handleSubmit}>
-                <Input
-                    type="email"
+        <Box
+            component="form"
+            onSubmit={formik.handleSubmit}
+            noValidate
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}
+        >
+            <Typography component="h1" variant="h5">
+                Sign in
+            </Typography>
+            <FormControl fullWidth sx={{ m: 1 }}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
                     name="email"
-                    placeholder="Email"
-                    value={credentials.email}
-                    onChange={handleChange}
-                    required
+                    autoComplete="email"
+                    autoFocus
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
                 />
-                <Input
-                    type="password"
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
                     name="password"
-                    placeholder="Password"
-                    value={credentials.password}
-                    onChange={handleChange}
-                    required
+                    label="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    autoComplete="current-password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    error={formik.touched.password && Boolean(formik.errors.password)}
+                    helperText={formik.touched.password && formik.errors.password}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
                 />
-                <Button type="submit">Log In</Button>
-            </Form>
-        </AuthContainer>
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                >
+                    Sign In
+                </Button>
+            </FormControl>
+        </Box>
     );
-};
+}
 
 export default Login;

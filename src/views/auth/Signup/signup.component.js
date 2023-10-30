@@ -1,58 +1,133 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContainer, Button, Form, Input } from '../auth.styles';
+import * as React from 'react';
+import { Button, TextField, Box, Typography, FormControl, FormHelperText, InputAdornment, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Signup = () => {
-    const [userInfo, setUserInfo] = useState({ email: '', password: '', confirmPassword: '' });
-    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
-    const handleChange = (e) => {
-        setUserInfo({
-            ...userInfo,
-            [e.target.name]: e.target.value,
-        });
+    const handleClickShowPassword = () => {
+        setShowPassword((prevShowPassword) => !prevShowPassword);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Sign-up logic here (e.g., make an API call to create a new user)
-        // You should also handle possible errors and provide feedback to the user.
-        // On success:
-        navigate('/home'); // or wherever your main app view is located
+    const handleClickShowConfirmPassword = () => {
+        setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
     };
+
+    const validationSchema = Yup.object({
+        email: Yup.string().email('Invalid email format').required('Required'),
+        password: Yup.string().required('No password provided.').min(8, 'Password is too short - should be 8 characters minimum.'),
+        confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match')
+    });
+
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+            confirmPassword: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            alert(JSON.stringify(values, null, 2));
+        },
+    });
 
     return (
-        <AuthContainer>
-            <h2>Sign Up</h2>
-            <Form onSubmit={handleSubmit}>
-                <Input
-                    type="email"
+        <Box
+            component="form"
+            onSubmit={formik.handleSubmit}
+            noValidate
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}
+        >
+            <Typography component="h1" variant="h5">
+                Sign up
+            </Typography>
+            <FormControl fullWidth sx={{ m: 1 }}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
                     name="email"
-                    placeholder="Email"
-                    value={userInfo.email}
-                    onChange={handleChange}
-                    required
+                    autoComplete="email"
+                    autoFocus
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
                 />
-                <Input
-                    type="password"
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
                     name="password"
-                    placeholder="Password"
-                    value={userInfo.password}
-                    onChange={handleChange}
-                    required
+                    label="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    autoComplete="new-password"  // The autocomplete attribute is set here
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    error={formik.touched.password && Boolean(formik.errors.password)}
+                    helperText={formik.touched.password && formik.errors.password}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
                 />
-                <Input
-                    type="password"
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
                     name="confirmPassword"
-                    placeholder="Confirm Password"
-                    value={userInfo.confirmPassword}
-                    onChange={handleChange}
-                    required
+                    label="Confirm Password"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    id="confirm-password"
+                    autoComplete="new-password"  // The same autocomplete attribute for the confirmation field
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                    error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowConfirmPassword}
+                                    edge="end"
+                                >
+                                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
                 />
-                <Button type="submit">Sign Up</Button>
-            </Form>
-        </AuthContainer>
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                >
+                    Sign Up
+                </Button>
+            </FormControl>
+        </Box>
     );
-};
+}
 
 export default Signup;

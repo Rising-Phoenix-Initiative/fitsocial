@@ -2,13 +2,13 @@ import styled from 'styled-components';
 
 // Define a helper for media queries if you use them frequently
 const respond = (breakpoint, content) => {
-    switch (breakpoint) {
-        case 'phone':
-            return `@media (max-width: 600px) { ${content} }`;
-        // You can add more cases for different breakpoints
-        default:
-            return;
-    }
+  switch (breakpoint) {
+    case 'phone':
+      return `@media (max-width: 600px) { ${content} }`;
+    // You can add more cases for different breakpoints
+    default:
+      return;
+  }
 };
 
 export const LogoContainer = styled.div`
@@ -40,7 +40,7 @@ export const LogoImage = styled.img`
 
 export const Title = styled.div`
   text-decoration: none;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: ${props => props.theme.brand.fontFamily};
   color: #ddd;
   font-size: 2rem;
   margin-left: 1.5rem;

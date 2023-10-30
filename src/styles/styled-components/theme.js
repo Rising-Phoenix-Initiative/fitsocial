@@ -1,6 +1,9 @@
+
+
 const sharedTheme = {
     brand: {
-        primary: '#04ED04',
+        primary: '#11cc11',
+        fontFamily: `'Ubuntu', sans-serif`,
     },
     fonts: {
         primary: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -29,8 +32,9 @@ const sharedTheme = {
 // Light theme values
 export const lightTheme = {
     ...sharedTheme,
+    mode: 'light',
     colors: {
-        primary: '#04ED04',
+        primary: '#11cc11',
         secondary: '#B80C09',
         background: '#F7FFF7',
         surface: '#D7CDCC',
@@ -38,20 +42,23 @@ export const lightTheme = {
         text: '#14110F',
         error: '#B80C09',
         onPrimary: '#F7FFF7',
+        blue: "#3498db",
     },
 };
 
 // Dark theme values
 export const darkTheme = {
     ...sharedTheme,
+    mode: 'dark',
     colors: {
-        primary: '#033C02',
-        secondary: '#6B0205',
+        primary: '#11cc11',
+        secondary: '#B80C09',
         background: '#242423',
         surface: '#434343',
         onSurface: '#D7CDCC',
         text: '#F7FFF7',
         error: '#FF5757',
         onPrimary: '#000000',
+        blue: "#3498db",
     },
 };

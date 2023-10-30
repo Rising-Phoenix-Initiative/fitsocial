@@ -82,6 +82,27 @@ const GlobalStyle = createGlobalStyle`
       scroll-behavior: auto !important;
     }
   }
+
+  /* Custom Scrollbar Styles */
+
+  ::-webkit-scrollbar {
+      width: 5px;
+      background-color: #00000033;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      background-color: ${({ theme }) => theme.colors.primary};
+      border-radius: 8px;
+  }
+
+  * {
+      scrollbar-width: 5px;
+      scrollbar-color: ${({ theme }) => theme.colors.primary} transparent;
+  }
+
+  main::-webkit-scrollbar {
+      margin-top: 80px; 
+  }
 `;
 
 export default GlobalStyle;
