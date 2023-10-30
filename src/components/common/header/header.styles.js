@@ -12,7 +12,6 @@ export const HeaderContainer = styled.header`
   left: 0;
   width: 100%;
   z-index: 10;
-  margin-right: ${props => props.scrollbarVisible ? '16px' : '0'};  
 `;
 
 

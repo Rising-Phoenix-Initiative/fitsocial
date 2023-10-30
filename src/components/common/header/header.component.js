@@ -4,10 +4,8 @@ import Logo from '../../logo/logo.component';
 import { InputBase, IconButton, Badge, Avatar, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import { Search, Notifications, ExpandMore, Portrait, ExitToApp } from '@mui/icons-material';
 import { HeaderContainer, Navigation, SearchContainer, UserSection } from './header.styles';
-import useScrollbarVisible from '../../../hooks/use-scrollbar-visible.hook';
 
 const Header = ({ authenticated = false }) => {
-  const isScrollbarVisible = useScrollbarVisible();
   const [notifAnchorEl, setNotifAnchorEl] = useState(null);
   const [userDropdownAnchorEl, setUserDropdownAnchorEl] = useState(null);
 
@@ -20,7 +18,7 @@ const Header = ({ authenticated = false }) => {
   };
 
   return (
-    <HeaderContainer scrollbarVisible={isScrollbarVisible}>
+    <HeaderContainer>
       <Logo />
       {authenticated ? (
         <>
