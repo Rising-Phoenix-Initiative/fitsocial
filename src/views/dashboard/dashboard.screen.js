@@ -1,7 +1,18 @@
 import React from 'react';
-import { DashboardContainer, NavSection, NavLink, MainContent } from './dashboard.styles';
+import {
+    DashboardContainer,
+    MainContent,
+    PostsList,
+    SideContent,
+    SafeArea,
+    SearchComponent,
+    SearchBar
+} from './dashboard.styles';
 import Post from '../../components/post/post.component';
 import Navigation from '../../components/common/navigation/navigation.components';
+import UserStats from './components/user-stats/user-stats.component';
+import { Box, IconButton, InputBase } from '@mui/material';
+import { Search } from '@mui/icons-material';
 
 // Mock data: array of post objects
 const postData = [
@@ -23,21 +34,59 @@ const postData = [
     // Add as many posts as you like for testing purposes
 ];
 
+const userData = {
+    profilePicture: 'https://via.placeholder.com/150',
+    name: 'John Doe',
+    workouts: 150,
+    achievements: ['5k Runner', '100 Workouts', 'Marathon Finisher'],
+    goalProgress: 75, // This represents the percentage of the goal achieved.
+    recentActivities: [
+        'Completed a 10k run',
+        'Joined "Summer Fitness Challenge"',
+        'Achieved "5k Runner" badge',
+        'Posted a new workout routine',
+        'Shared a diet tip'
+    ]
+};
+
+
 const Dashboard = () => {
     return (
         <DashboardContainer>
             <Navigation />
-            <MainContent>
-                {/* Map through postData to render Post components */}
-                {postData.map(post => (
-                    <Post
-                        key={post.id}
-                        content={post.content}
-                        likes={post.likes}
-                        comments={post.comments}
-                    />
-                ))}
-            </MainContent>
+            <Box sx={{
+                display: 'flex',
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+            }}>
+                <MainContent>
+                    <SearchComponent>
+                        <SearchBar>
+                            <IconButton size="small">
+                                <Search />
+                            </IconButton>
+                            <InputBase placeholder="Search..." />
+                        </SearchBar>
+                    </SearchComponent>
+                    <SafeArea>
+                        <PostsList>
+                            {/* Map through postData to render Post components */}
+                            {postData.map(post => (
+                                <Post
+                                    key={post.id}
+                                    content={post.content}
+                                    likes={post.likes}
+                                    comments={post.comments}
+                                />
+                            ))}
+                        </PostsList>
+                    </SafeArea>
+                </MainContent>
+                <SideContent>
+                    <UserStats user={userData} />
+                </SideContent>
+            </Box>
         </DashboardContainer>
     );
 };

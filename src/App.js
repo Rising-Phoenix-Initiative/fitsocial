@@ -25,7 +25,7 @@ const App = () => {
         </Helmet>
         <GlobalStyle />
         <MuiGlobalStyles />
-        <Header authenticated={true} />
+        {/* <Header authenticated={true} /> */}
         <AppRoutes authenticated={true} />
       </MuiComponentsThemeProvider>
     </StyledComponentsThemeProvider>

@@ -1,5 +1,3 @@
-
-
 const sharedTheme = {
     brand: {
         primary: '#11cc11',
@@ -25,7 +23,7 @@ const sharedTheme = {
         large: '2rem', // 32px
         xlarge: '4rem', // 64px
     },
-    borderRadius: '0.25rem', // 4px
+    borderRadius: '1rem', // 16px
     transition: '0.3s ease-in-out',
 };
 

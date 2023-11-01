@@ -8,8 +8,8 @@ const MuiGlobalStyles = () => (
             transitionDelay: '9999s', // Prevent the rapid autofill color flash
             transitionProperty: 'background-color, color',
             // You can use your theme's color here, or transparent if you want the input's background to remain unchanged
-            backgroundColor: 'transparent !important', // Use !important to override browser's autofill style
-            color: '#yourTextColor !important', // Replace with appropriate text color from your theme
+            backgroundColor: 'background.default !important', // Use !important to override browser's autofill style
+            color: 'primary.main !important', // Replace with appropriate text color from your theme
         },
     }} />
 );

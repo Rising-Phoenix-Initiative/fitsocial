@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-// Define a helper for media queries if you use them frequently
 const respond = (breakpoint, content) => {
   switch (breakpoint) {
     case 'phone':
@@ -14,7 +13,6 @@ const respond = (breakpoint, content) => {
 export const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 15%;
   text-decoration: none;
 
   &:link,
@@ -43,12 +41,12 @@ export const Title = styled.div`
   font-family: ${props => props.theme.brand.fontFamily};
   color: #ddd;
   font-size: 2rem;
-  margin-left: 1.5rem;
+  margin-left: 1.3rem;
   font-weight: 700;
   line-height: 1;
   display: flex;
 
-  ${respond('phone', 'font-size: 5rem;')}
+  ${respond('phone', 'font-size: 1.75rem;')}
 `;
 
 export const TitleGreen = styled.span`

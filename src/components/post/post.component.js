@@ -24,7 +24,7 @@ const Post = ({ content = "Test", likes = 42, comments = 4, initialLiked = false
     };
 
     return (
-        <Box sx={{ my: 2, p: 2, border: '1px solid', borderColor: 'divider', maxWidth: '600px' }}>
+        <Box sx={{ my: 2, p: 2, border: '1px solid', borderRadius: '16px', borderColor: 'divider', width: '100%' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar sx={{ mr: 1 }}>U</Avatar>

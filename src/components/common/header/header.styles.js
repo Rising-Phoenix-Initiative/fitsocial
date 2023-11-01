@@ -12,6 +12,7 @@ export const HeaderContainer = styled.header`
   left: 0;
   width: 100%;
   z-index: 10;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.surface};
 `;
 
 
@@ -31,17 +32,4 @@ export const Navigation = styled.nav`
   }
 `;
 
-export const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ theme }) => theme.colors.surface};
-  border-radius: 16px;
-  padding: 8px;
-`;
 
-export const UserSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-`;
