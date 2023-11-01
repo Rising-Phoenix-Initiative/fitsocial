@@ -23,7 +23,7 @@ const sharedTheme = {
         large: '2rem', // 32px
         xlarge: '4rem', // 64px
     },
-    borderRadius: '1rem', // 16px
+    borderRadius: '16px', // 16px
     transition: '0.3s ease-in-out',
 };
 

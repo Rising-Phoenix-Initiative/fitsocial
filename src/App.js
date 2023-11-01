@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
 import { ThemeProvider as MuiComponentsThemeProvider } from '@mui/material/styles';
 
@@ -8,11 +8,14 @@ import GlobalStyle from './styles/styled-components/global.styles';
 import MuiGlobalStyles from "./styles/mui/global.styles";
 import { ThemeProviderContext } from "./styles/styled-components/ThemeProvider.context";
 
-import AppRoutes from "./AppRoutes";
+import AppRoutes from "./routes/DashboardRoutes";
 import { Helmet } from "react-helmet";
-import Header from "./components/common/header/header.component";
+import Dashboard from "./views/dashboard/dashboard.screen";
+import Landing from "./views/landing/landing.screen";
+import { useAuth } from "./context/auth.context";
 
 const App = () => {
+  const { isAuthenticated } = useAuth();
   const { theme } = useContext(ThemeProviderContext);
   const currentTheme = theme === 'light' ? lightTheme : darkTheme;
   const muiTheme = createMuiTheme(currentTheme);
@@ -25,8 +28,7 @@ const App = () => {
         </Helmet>
         <GlobalStyle />
         <MuiGlobalStyles />
-        {/* <Header authenticated={true} /> */}
-        <AppRoutes authenticated={true} />
+        {isAuthenticated ? <Dashboard /> : <Landing />}
       </MuiComponentsThemeProvider>
     </StyledComponentsThemeProvider>
   );

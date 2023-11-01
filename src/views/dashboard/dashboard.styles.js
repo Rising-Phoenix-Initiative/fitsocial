@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import styled from 'styled-components';
 
 export const DashboardContainer = styled.div`
@@ -15,7 +16,7 @@ export const MainContent = styled.main`
   border-right: 1px solid ${({ theme }) => theme.colors.surface};
 `;
 
-export const SearchComponent = styled.div`
+export const MainContentTitle = styled(Box)`
   backdrop-filter: blur(10px);
   position: sticky;
   display: flex;
@@ -26,6 +27,13 @@ export const SearchComponent = styled.div`
   width: 100%;
   padding: 20px 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.surface};
+`
+
+export const SearchContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: 20px;
 `;
 
 export const SearchBar = styled.div`
@@ -36,22 +44,14 @@ export const SearchBar = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.surface};
   border-radius: 16px;
   padding: 8px;
-  margin: 0 40px;
+  margin: 0;
   width: 100%;
 `;
-
-
-export const PostsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow-y: auto;
-`
 
 export const SideContent = styled.aside`
   padding: 20px 75px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 `;
 
 

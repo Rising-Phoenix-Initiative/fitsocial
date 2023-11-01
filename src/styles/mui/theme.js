@@ -36,7 +36,7 @@ export const createMuiTheme = (customTheme) => {
             fontWeightBold: customTheme.fontWeights.bold,
         },
         shape: {
-            borderRadius: customTheme.borderRadius,
+            borderRadius: 16,
         },
         components: overrides
     });

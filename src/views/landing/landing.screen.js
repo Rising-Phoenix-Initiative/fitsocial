@@ -4,10 +4,12 @@ import Features from './components/features.component';
 import Testimonials from './components/testimonials.component';
 import FAQ from './components/faq.component';
 import Footer from './components/footer.component';
+import Header from './components/header/header.component';
 
-const LandingPage = () => {
+const Landing = () => {
     return (
         <>
+            <Header />
             <Hero />
             <Features />
             <Testimonials />
@@ -17,4 +19,4 @@ const LandingPage = () => {
     );
 };
 
-export default LandingPage;
+export default Landing;
