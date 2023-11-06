@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
 import { ThemeProvider as MuiComponentsThemeProvider } from '@mui/material/styles';
 
@@ -8,7 +8,6 @@ import GlobalStyle from './styles/styled-components/global.styles';
 import MuiGlobalStyles from "./styles/mui/global.styles";
 import { ThemeProviderContext } from "./styles/styled-components/ThemeProvider.context";
 
-import AppRoutes from "./routes/DashboardRoutes";
 import { Helmet } from "react-helmet";
 import Dashboard from "./views/dashboard/dashboard.screen";
 import Landing from "./views/landing/landing.screen";
