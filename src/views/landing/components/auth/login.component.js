@@ -1,36 +1,31 @@
 import * as React from 'react';
-import { Button, TextField, Box, Typography, FormControl, FormHelperText, InputAdornment, IconButton } from '@mui/material';
+import { Button, TextField, Box, Typography, FormControl, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useAuth } from '../../../../context/auth.context';
 
-const Signup = () => {
+const Login = () => {
     const [showPassword, setShowPassword] = React.useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+    const { login } = useAuth()
 
     const handleClickShowPassword = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
     };
 
-    const handleClickShowConfirmPassword = () => {
-        setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
-    };
-
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Required'),
-        password: Yup.string().required('No password provided.').min(8, 'Password is too short - should be 8 characters minimum.'),
-        confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match')
+        password: Yup.string().required('No password provided.'),
     });
 
     const formik = useFormik({
         initialValues: {
             email: '',
             password: '',
-            confirmPassword: '',
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+            login(values.email, values.password)
         },
     });
 
@@ -46,7 +41,7 @@ const Signup = () => {
             }}
         >
             <Typography component="h1" variant="h5">
-                Sign up
+                Log In
             </Typography>
             <FormControl fullWidth sx={{ m: 1 }}>
                 <TextField
@@ -71,7 +66,7 @@ const Signup = () => {
                     label="Password"
                     type={showPassword ? 'text' : 'password'}
                     id="password"
-                    autoComplete="new-password"  // The autocomplete attribute is set here
+                    autoComplete="current-password"
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     error={formik.touched.password && Boolean(formik.errors.password)}
@@ -90,44 +85,17 @@ const Signup = () => {
                         ),
                     }}
                 />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    id="confirm-password"
-                    autoComplete="new-password"  // The same autocomplete attribute for the confirmation field
-                    value={formik.values.confirmPassword}
-                    onChange={formik.handleChange}
-                    error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowConfirmPassword}
-                                    edge="end"
-                                >
-                                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
                 <Button
                     type="submit"
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                 >
-                    Sign Up
+                    Log In
                 </Button>
             </FormControl>
         </Box>
     );
 }
 
-export default Signup;
+export default Login;

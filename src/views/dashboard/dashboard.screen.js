@@ -8,12 +8,12 @@ import {
     SearchContainer,
     MainContentTitle
 } from './dashboard.styles';
-import Navigation from '../../components/common/navigation/navigation.components';
+import Navigation from '../../components/navigation/navigation.components';
 import UserStats from './components/user-stats/user-stats.component';
 import { Box, IconButton, InputBase, Typography } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import DashboardRoutes from '../../routes/DashboardRoutes';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { capitalizeFirstLetter } from '../../utils/capitalize.util';
 
 const userData = {

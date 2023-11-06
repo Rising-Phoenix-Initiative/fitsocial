@@ -23,13 +23,14 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IconButton, Badge, Avatar, Menu, MenuItem } from '@mui/material';
 import { Notifications as NotificationsIcon, Portrait, ExitToApp, Settings, Bookmark } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { capitalizeFirstLetter } from '../../../utils/capitalize.util';
+import { capitalizeFirstLetter } from '../../utils/capitalize.util';
 import { topics } from './topics.data';
-import { generateSlug } from '../../../utils/generate-slug.util';
-import Logo from '../../logo/logo.component';
+import { generateSlug } from '../../utils/generate-slug.util';
+import Logo from '../logo/logo.component';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { NavigationContainer } from './navigation.styles';
+import { useAuth } from '../../context/auth.context';
 
 const UserSection = styled.div`
   display: flex;
@@ -39,6 +40,7 @@ const UserSection = styled.div`
 
 function Navigation() {
     const [userDropdownAnchorEl, setUserDropdownAnchorEl] = useState(null);
+    const { logout } = useAuth();
 
     const handleUserDropdownOpen = (event) => {
         setUserDropdownAnchorEl(event.currentTarget);
@@ -50,7 +52,7 @@ function Navigation() {
                 <Logo />
                 <Box sx={{ mt: '40px' }}>
                     <List>
-                        <ListItem button component={Link} to="/">
+                        <ListItem button component={Link} to="/home">
                             <ListItemIcon><HomeIcon /></ListItemIcon>
                             <ListItemText primary="Home" />
                         </ListItem>
@@ -134,6 +136,7 @@ function Navigation() {
                             overflow: 'visible',
                             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                             mb: 1.5,
+                            p: 1,
                             '& .MuiAvatar-root': {
                                 width: 32,
                                 height: 32,
@@ -153,7 +156,7 @@ function Navigation() {
                         <ListItemIcon><Settings /></ListItemIcon>
                         <ListItemText primary="Account Settings" />
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem onClick={logout}>
                         <ListItemIcon><ExitToApp /></ListItemIcon>
                         <ListItemText primary="Logout" />
                     </MenuItem>

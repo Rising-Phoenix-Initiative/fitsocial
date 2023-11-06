@@ -11,6 +11,9 @@ const MuiGlobalStyles = () => (
             backgroundColor: 'background.default !important', // Use !important to override browser's autofill style
             color: 'primary.main !important', // Replace with appropriate text color from your theme
         },
+        '&::-ms-reveal, &::-webkit-credentials-auto-fill-button': {
+            display: 'none !important',
+        },
     }} />
 );
 

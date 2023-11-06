@@ -1,32 +1,60 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Grid, Card, CardContent, Typography, useTheme } from '@mui/material';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import PeopleIcon from '@mui/icons-material/People';
 
-const FeaturesContainer = styled.section`
-  padding: 4rem 10%;
-  text-align: center;
-`;
+const Features = () => {
+    const theme = useTheme();
 
-const FeatureBlock = styled.div`
-  margin-bottom: 2rem;
-`;
-
-const Features = () => (
-    <FeaturesContainer>
-        <h2>Features</h2>
-        <FeatureBlock>
-            <h3>Connect with Trainers</h3>
-            <p>Find professional trainers for tailored advice and workout plans.</p>
-        </FeatureBlock>
-        <FeatureBlock>
-            <h3>Track Your Progress</h3>
-            <p>Keep tabs on your workouts, diet, and progress with easy-to-use tools.</p>
-        </FeatureBlock>
-        <FeatureBlock>
-            <h3>Join Fitness Communities</h3>
-            <p>Be a part of a supportive community that motivates each other to reach fitness goals.</p>
-        </FeatureBlock>
-        {/* Add as many features as you want */}
-    </FeaturesContainer>
-);
+    return (
+        <Grid container spacing={4} sx={{ padding: theme.spacing(8, 2) }}>
+            <Grid item xs={12}>
+                <Typography variant="h2" component="h2" gutterBottom textAlign="center">
+                    Features
+                </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+                <Card>
+                    <CardContent>
+                        <FitnessCenterIcon fontSize="large" color="primary" />
+                        <Typography variant="h5" component="h3" gutterBottom>
+                            Connect with Trainers
+                        </Typography>
+                        <Typography variant="body1">
+                            Find professional trainers for tailored advice and workout plans.
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+                <Card>
+                    <CardContent>
+                        <TimelineIcon fontSize="large" color="primary" />
+                        <Typography variant="h5" component="h3" gutterBottom>
+                            Track Your Progress
+                        </Typography>
+                        <Typography variant="body1">
+                            Keep tabs on your workouts, diet, and progress with easy-to-use tools.
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+                <Card>
+                    <CardContent>
+                        <PeopleIcon fontSize="large" color="primary" />
+                        <Typography variant="h5" component="h3" gutterBottom>
+                            Join Fitness Communities
+                        </Typography>
+                        <Typography variant="body1">
+                            Be a part of a supportive community that motivates each other to reach fitness goals.
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </Grid>
+        </Grid>
+    );
+};
 
 export default Features;

@@ -1,42 +1,44 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-
-const FAQContainer = styled.section`
-  padding: 4rem 10%;
-`;
-
-const Question = styled.article`
-  margin-bottom: 1rem;
-  cursor: pointer;
-`;
-
-const Answer = styled.div`
-  margin-top: 0.5rem;
-`;
+import React from 'react';
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const FAQ = () => {
-    const [visibleAnswer, setVisibleAnswer] = useState(null);
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
 
     const questionsAnswers = [
-        { question: 'Do I need a personal trainer to use Fitsocial?', answer: 'No, Fitsocial is for everyone interested in fitness, whether you have a trainer or not.' },
-        { question: 'Can I share my fitness journey on Fitsocial?', answer: 'Absolutely! Fitsocial encourages sharing your fitness stories to motivate others.' },
+        {
+            id: 'panel1',
+            question: 'Do I need a personal trainer to use Fitsocial?',
+            answer: 'No, Fitsocial is for everyone interested in fitness, whether you have a trainer or not.'
+        },
+        {
+            id: 'panel2',
+            question: 'Can I share my fitness journey on Fitsocial?',
+            answer: 'Absolutely! Fitsocial encourages sharing your fitness stories to motivate others.'
+        },
         // Add more FAQs here...
     ];
 
-    const handleClick = index => {
-        setVisibleAnswer(index === visibleAnswer ? null : index);
-    };
-
     return (
-        <FAQContainer>
-            <h2>Frequently Asked Questions</h2>
-            {questionsAnswers.map((item, index) => (
-                <Question key={index} onClick={() => handleClick(index)}>
-                    <h3>{item.question}</h3>
-                    {visibleAnswer === index && <Answer>{item.answer}</Answer>}
-                </Question>
+        <div>
+            <Typography variant="h2" component="h2" gutterBottom textAlign="center">
+                Frequently Asked Questions
+            </Typography>
+            {questionsAnswers.map((faq) => (
+                <Accordion key={faq.id} expanded={expanded === faq.id} onChange={handleChange(faq.id)}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>{faq.question}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography>{faq.answer}</Typography>
+                    </AccordionDetails>
+                </Accordion>
             ))}
-        </FAQContainer>
+        </div>
     );
 };
 

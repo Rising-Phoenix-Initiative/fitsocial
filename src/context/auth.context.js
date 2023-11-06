@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Initial context state
 const initialAuthState = {
@@ -16,6 +17,7 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(true);
     const [user, setUser] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Here you can fetch authentication status from local storage or API
@@ -30,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     const login = (userData) => {
         setIsAuthenticated(true);
         setUser(userData);
+        navigate('/');
         // Optionally save user data in local storage or cookie
         // localStorage.setItem('user', JSON.stringify(userData));
     };
@@ -37,6 +40,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setIsAuthenticated(false);
         setUser(null);
+        navigate('/');
         // Optionally clear user data from local storage or cookie
         // localStorage.removeItem('user');
     };

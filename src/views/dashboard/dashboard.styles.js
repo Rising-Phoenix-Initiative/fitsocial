@@ -55,7 +55,7 @@ export const SideContent = styled.aside`
 `;
 
 
-export const SafeArea = styled.div`
+export const SafeArea = styled(Box)`
   width: 100%;
   padding: 20px 40px;
   display: flex;

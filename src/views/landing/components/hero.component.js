@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import backgroundImage from "../../../assets/hero-background.png";
+import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const HeroContainer = styled.section`
   position: relative; // Relative to the current container
@@ -46,31 +48,16 @@ const HeroContent = styled.div`
     font-size: 1.5rem;
     margin-bottom: 2rem;
   }
-
-  button {
-    padding: 0.8rem 1.5rem;
-    background-color: ${props => props.theme.brand.primary};
-    color: ${props => props.theme.colors.onPrimary};
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: ${props => props.theme.colors.primaryVariant};
-    }
-  }
 `;
 
 const Hero = () => (
-    <HeroContainer>
-        <HeroContent>
-            <h1>Welcome to Fitsocial</h1>
-            <p>Connect with fitness enthusiasts around the world</p>
-            <button>Join Now</button>
-        </HeroContent>
-    </HeroContainer>
+  <HeroContainer>
+    <HeroContent>
+      <h1>Welcome to fitsocial</h1>
+      <p>Connect with fitness enthusiasts around the world</p>
+      <Button sx={{ fontSize: '1rem', fontWeight: '600' }} size="large" variant="contained" component={Link} to={"/signup"}>Join Now</Button>
+    </HeroContent>
+  </HeroContainer>
 );
 
 export default Hero;
