@@ -1,10 +1,17 @@
 export const getInitials = (fullName) => {
-    const nameParts = fullName?.trim().split(/\s+/); // Split by one or more whitespace
-    if (nameParts?.length === 1) {
-        // Only one name part found, return the first letter of this part
-        return nameParts[0][0].toUpperCase();
-    } else {
-        // Return the first letter of the first two name parts
-        return (nameParts[0][0] + nameParts[1][0]).toUpperCase();
+    // Check if fullName is a string and not empty
+    if (typeof fullName !== 'string' || fullName.trim().length === 0) {
+        return '';
     }
+
+    const nameParts = fullName.trim().split(/\s+/); // Split by whitespace to get name parts
+
+    // Check if we have at least one word to extract initial
+    if (nameParts.length > 0) {
+        const firstInitial = nameParts[0][0].toUpperCase(); // First initial
+        const secondInitial = nameParts.length > 1 ? nameParts[1][0].toUpperCase() : ''; // Second initial, if available
+        return firstInitial + secondInitial;
+    }
+
+    return '';
 }
