@@ -1,52 +1,102 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { checkCurrentUser, createUser, loginUser, logoutUser } from '../services/users.service';
 
-// Initial context state
 const initialAuthState = {
-    isAuthenticated: true,
+    isAuthenticated: false,
     user: null,
 };
 
-// Create the context
 const AuthContext = createContext({
     ...initialAuthState,
     login: () => { },
     logout: () => { },
+    signup: () => { },
 });
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
+    const [authIsLoading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Here you can fetch authentication status from local storage or API
-        // For example:
-        // const storedUser = localStorage.getItem('user');
-        // if (storedUser) {
-        //     setIsAuthenticated(true);
-        //     setUser(JSON.parse(storedUser));
-        // }
+        setLoading(true);
+        const session = localStorage.getItem('session');
+        if (session) {
+            setTimeout(() => {
+                setLoading(false);
+                setIsAuthenticated(true);
+                setUser(JSON.parse(session));
+            }, 2000);
+        } else {
+            setLoading(false);
+        }
     }, []);
 
-    const login = (userData) => {
-        setIsAuthenticated(true);
-        setUser(userData);
-        navigate('/');
-        // Optionally save user data in local storage or cookie
-        // localStorage.setItem('user', JSON.stringify(userData));
+    const signup = async (userData) => {
+        try {
+            const { userCreationResponse, documentCreationResponse } = await createUser(userData);
+            console.log(userCreationResponse);
+            console.log(documentCreationResponse);
+
+            await login(userData.email, userData.password);
+        } catch (error) {
+            console.error('Signup Error:', error);
+        }
     };
 
-    const logout = () => {
-        setIsAuthenticated(false);
-        setUser(null);
-        navigate('/');
-        // Optionally clear user data from local storage or cookie
-        // localStorage.removeItem('user');
+
+    const login = async (email, password) => {
+        setLoading(true);
+        try {
+            const session = await loginUser(email, password);
+            console.log(session);
+            localStorage.setItem('session', JSON.stringify(session));
+            setIsAuthenticated(true);
+            setUser(session);
+            setLoading(false);
+            navigate('/');
+        } catch (error) {
+            console.error('Login Error:', error);
+        }
     };
+
+    const checkSession = async () => {
+        try {
+            const session = await checkCurrentUser();
+            console.log('Session:', session);
+            setIsAuthenticated(true);
+            setUser(session);
+        } catch (error) {
+            console.error('Check Session Error:', error);
+            setIsAuthenticated(false);
+            setUser(null);
+            localStorage.removeItem('session');
+        }
+    };
+
+    const logout = async () => {
+        setLoading(true);
+        try {
+            await logoutUser();
+            setIsAuthenticated(false);
+            setUser(null);
+            localStorage.removeItem('session');
+            setLoading(false);
+            navigate('/');
+        } catch (error) {
+            console.error('Logout Error:', error);
+        }
+    };
+
+    // Check the session on app start
+    useEffect(() => {
+        checkSession();
+    }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+        <AuthContext.Provider value={{ authIsLoading, isAuthenticated, user, signup, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

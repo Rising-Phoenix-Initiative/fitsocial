@@ -19,3 +19,22 @@ export const StyledLinearProgress = styled(LinearProgress)`
   margin-bottom: ${(props) => props.theme.spacings.medium};
   color: ${(props) => props.theme.colors.primary};
 `;
+
+export const SearchContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: 20px;
+`;
+
+export const SearchBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-self: flex-start;
+  background-color: ${({ theme }) => theme.colors.background};
+  border: 1px solid ${({ theme }) => theme.colors.surface};
+  border-radius: 16px;
+  padding: 8px;
+  margin: 0;
+  width: 100%;
+`;

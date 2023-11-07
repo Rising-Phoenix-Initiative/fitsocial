@@ -7,7 +7,7 @@ const Logo = ({ noText = false }) => {
   const imagePath = process.env.PUBLIC_URL + '/fitsociallogo.png';  // Replace 'your-logo.png' with your actual file name
 
   return (
-    <LogoContainer onClick={<Navigate to="/" />}>
+    <LogoContainer onClick={() => <Navigate to="/" />}>
       <LogoImage src={imagePath} alt="logo" />
       {noText ? null :
         (<Title>

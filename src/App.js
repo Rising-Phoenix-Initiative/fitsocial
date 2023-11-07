@@ -6,18 +6,21 @@ import { lightTheme, darkTheme } from './styles/styled-components/theme';
 import { createMuiTheme } from "./styles/mui/theme";
 import GlobalStyle from './styles/styled-components/global.styles';
 import MuiGlobalStyles from "./styles/mui/global.styles";
-import { ThemeProviderContext } from "./styles/styled-components/ThemeProvider.context";
+import { ThemeProviderContext } from "./context/theme.context";
 
 import { Helmet } from "react-helmet";
 import Dashboard from "./views/dashboard/dashboard.screen";
 import Landing from "./views/landing/landing.screen";
 import { useAuth } from "./context/auth.context";
+import Loader from "./components/loader/loader.component";
 
 const App = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, authIsLoading } = useAuth();
   const { theme } = useContext(ThemeProviderContext);
   const currentTheme = theme === 'light' ? lightTheme : darkTheme;
   const muiTheme = createMuiTheme(currentTheme);
+
+  console.log("authIsLoading", authIsLoading);
 
   return (
     <StyledComponentsThemeProvider theme={currentTheme}>
@@ -27,7 +30,7 @@ const App = () => {
         </Helmet>
         <GlobalStyle />
         <MuiGlobalStyles />
-        {isAuthenticated ? <Dashboard /> : <Landing />}
+        {authIsLoading ? <Loader /> : (isAuthenticated ? <Dashboard /> : <Landing />)}
       </MuiComponentsThemeProvider>
     </StyledComponentsThemeProvider>
   );

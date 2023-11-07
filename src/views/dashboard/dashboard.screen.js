@@ -1,20 +1,12 @@
 import React from 'react';
 import {
     DashboardContainer,
-    MainContent,
     SideContent,
-    SafeArea,
-    SearchBar,
-    SearchContainer,
-    MainContentTitle
 } from './dashboard.styles';
-import Navigation from '../../components/navigation/navigation.components';
-import UserStats from './components/user-stats/user-stats.component';
-import { Box, IconButton, InputBase, Typography } from '@mui/material';
-import { Search } from '@mui/icons-material';
-import DashboardRoutes from '../../routes/DashboardRoutes';
-import { useLocation } from 'react-router-dom';
-import { capitalizeFirstLetter } from '../../utils/capitalize.util';
+import Navigation from './components/navigation/navigation.components';
+import { Box } from '@mui/material';
+import Widgets from './components/widgets/widgets.component';
+import MainContent from './components/main/main-content.component';
 
 const userData = {
     profilePicture: 'https://via.placeholder.com/150',
@@ -33,10 +25,6 @@ const userData = {
 
 
 const Dashboard = () => {
-    const location = useLocation();
-    const segment = location.pathname.split('/')[1] || '';  // Extracts the first segment, e.g. "home" or "explore"
-    const title = capitalizeFirstLetter(segment);
-
     return (
         <DashboardContainer>
             <Navigation />
@@ -46,26 +34,9 @@ const Dashboard = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between'
             }}>
-                <MainContent>
-                    <MainContentTitle>
-                        <Typography variant="h4" component="h2">
-                            {title}
-                        </Typography>
-                    </MainContentTitle>
-                    <SafeArea>
-                        <DashboardRoutes />
-                    </SafeArea>
-                </MainContent>
+                <MainContent />
                 <SideContent>
-                    <SearchContainer>
-                        <SearchBar>
-                            <IconButton size="small">
-                                <Search />
-                            </IconButton>
-                            <InputBase placeholder="Search..." />
-                        </SearchBar>
-                    </SearchContainer>
-                    <UserStats user={userData} />
+                    <Widgets user={userData} />
                 </SideContent>
             </Box>
         </DashboardContainer>

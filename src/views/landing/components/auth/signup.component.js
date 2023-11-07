@@ -1,11 +1,16 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
     Button, TextField, Box, Typography, FormControl, InputAdornment, IconButton,
-    LinearProgress, FormHelperText
+    LinearProgress, FormHelperText, Grid, InputLabel, Select, MenuItem
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff, Event as EventIcon } from '@mui/icons-material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useAuth } from '../../../../context/auth.context';
 
 const calculatePasswordStrength = (password) => {
     let strength = 0;
@@ -17,10 +22,17 @@ const calculatePasswordStrength = (password) => {
     return strength / 5; // Return a fraction between 0 and 1.
 };
 
+const currentYear = new Date().getFullYear();
+const maxDate = new Date(currentYear - 18, new Date().getMonth(), new Date().getDate());
+
 const Signup = () => {
-    const [showPassword, setShowPassword] = React.useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-    const [passwordStrength, setPasswordStrength] = React.useState(0);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [passwordStrength, setPasswordStrength] = useState(0);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [openDatePicker, setOpenDatePicker] = useState(false);
+
+    const { signup } = useAuth();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -49,7 +61,8 @@ const Signup = () => {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+            console.log("values", { ...values, birthdate: selectedDate });
+            signup({ ...values, birthdate: selectedDate });
         },
     });
 
@@ -72,11 +85,99 @@ const Signup = () => {
                     margin="normal"
                     required
                     fullWidth
+                    id="name"
+                    label="Name"
+                    name="name"
+                    autoComplete="name"
+                    autoFocus
+                    value={formik.values.name}
+                    onChange={formik.handleChange}
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    value={formik.values.username}
+                    onChange={formik.handleChange}
+                    error={formik.touched.username && Boolean(formik.errors.username)}
+                    helperText={formik.touched.username && formik.errors.username}
+                />
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} sm={6}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                open={openDatePicker}
+                                onOpen={() => setOpenDatePicker(true)}
+                                onClose={() => setOpenDatePicker(false)}
+                                value={selectedDate}
+                                onChange={(date) => {
+                                    setSelectedDate(date);
+                                    setOpenDatePicker(false); // Optionally close picker after selection
+                                }}
+                                maxDate={maxDate}
+                                renderInput={(props) => (
+                                    <TextField
+                                        {...props}
+                                        InputProps={{
+                                            ...props.InputProps,
+                                            endAdornment: (
+                                                <IconButton onClick={setOpenDatePicker(true)}>
+                                                    <EventIcon />
+                                                </IconButton>
+                                            ),
+                                        }}
+                                    />
+                                )}
+                            />
+                        </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel id="gender-label">Gender</InputLabel>
+                            <Select
+                                labelId="gender-label"
+                                id="gender"
+                                name="gender"
+                                value={formik.values.gender}
+                                label="Gender"
+                                onChange={formik.handleChange}
+                                error={formik.touched.gender && Boolean(formik.errors.gender)}
+                                MenuProps={{
+                                    PaperProps: {
+                                        sx: {
+                                            transform: 'translateY(5px) !important',
+                                            // This will remove the ::before styling
+                                            "&::before": {
+                                                content: 'none',
+                                            },
+                                        }
+                                    }
+                                }}
+                            >
+                                <MenuItem value="">
+                                    <em style={{ display: 'none' }}>None</em>
+                                </MenuItem>
+                                <MenuItem sx={{ mt: '-12px' }} value={'male'}>Male</MenuItem>
+                                <MenuItem value={'female'}>Female</MenuItem>
+                            </Select>
+                            <FormHelperText>{formik.touched.gender && formik.errors.gender}</FormHelperText>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
                     id="email"
                     label="Email Address"
                     name="email"
                     autoComplete="email"
-                    autoFocus
                     value={formik.values.email}
                     onChange={formik.handleChange}
                     error={formik.touched.email && Boolean(formik.errors.email)}

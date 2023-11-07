@@ -10,6 +10,9 @@ import {
     AccordionDetails,
     Box,
     Typography,
+    Dialog,
+    DialogContent,
+    TextField
 } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import ExploreIcon from '@mui/icons-material/Explore';
@@ -19,18 +22,21 @@ import PersonIcon from '@mui/icons-material/Person';
 import ForumIcon from '@mui/icons-material/Forum';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { IconButton, Badge, Avatar, Menu, MenuItem } from '@mui/material';
-import { Notifications as NotificationsIcon, Portrait, ExitToApp, Settings, Bookmark } from '@mui/icons-material';
+import { Notifications as NotificationsIcon, Portrait, ExitToApp, Settings, Bookmark, PhotoLibrary, GifBox, InsertEmoticon, Send } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { capitalizeFirstLetter } from '../../utils/capitalize.util';
+import { capitalizeFirstLetter } from '../../../../utils/capitalize.util';
 import { topics } from './topics.data';
-import { generateSlug } from '../../utils/generate-slug.util';
-import Logo from '../logo/logo.component';
+import { generateSlug } from '../../../../utils/generate-slug.util';
+import Logo from '../../../../components/logo/logo.component';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { NavigationContainer } from './navigation.styles';
-import { useAuth } from '../../context/auth.context';
+import { useAuth } from '../../../../context/auth.context';
+import { usePosts } from '../../../../context/posts.context';
+import { uploadImage } from '../../../../services/posts.service';
 
 const UserSection = styled.div`
   display: flex;
@@ -40,7 +46,39 @@ const UserSection = styled.div`
 
 function Navigation() {
     const [userDropdownAnchorEl, setUserDropdownAnchorEl] = useState(null);
-    const { logout } = useAuth();
+    const { logout, user } = useAuth();
+
+    const { createPost } = usePosts();
+    const [newPostOpen, setNewPostOpen] = useState(false);
+    const [postContent, setPostContent] = useState('');
+    const [error, setError] = useState(null);
+
+    const submitPost = async () => {
+        const postData = {
+            text: postContent,
+            userId: user.userId,
+        }
+        try {
+            await createPost(postData, user.userId);
+            setPostContent('');
+            setNewPostOpen(false);
+
+        } catch (error) {
+            setError(error.message);
+        }
+    }
+
+    const handleUpload = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            try {
+                const result = await uploadImage(file);
+                console.log(result); // Handle the success response
+            } catch (error) {
+                console.error(error); // Handle the error
+            }
+        }
+    };
 
     const handleUserDropdownOpen = (event) => {
         setUserDropdownAnchorEl(event.currentTarget);
@@ -106,9 +144,98 @@ function Navigation() {
                     </ListItem>
                     <Divider sx={{ my: '10px' }} />
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 100 }}>
-                        <Button sx={{ borderRadius: '40px', px: "40px", fontSize: '1.2rem', fontWeight: '700' }} color="primary" variant="contained">
+                        <Button
+                            sx={{
+                                borderRadius: '40px',
+                                px: "40px",
+                                fontSize: '1.2rem',
+                                fontWeight: '700'
+                            }}
+                            color="primary"
+                            variant="contained"
+                            onClick={() => setNewPostOpen(true)}
+                        >
                             New Post
                         </Button>
+                        <Dialog open={newPostOpen} onClose={() => setNewPostOpen(false)} fullWidth maxWidth="sm">
+                            <Box display="flex" justifyContent="space-between" alignItems="center" p={2} sx={{ pb: 0 }}>
+                                <Avatar sx={{ backgroundColor: '#4173fc' }}>VF</Avatar>
+                                <IconButton edge="end" color="inherit" onClick={() => setNewPostOpen(false)} aria-label="close">
+                                    <CloseIcon />
+                                </IconButton>
+                            </Box>
+                            <DialogContent>
+                                <TextField
+                                    onChange={(e) => setPostContent(e.target.value)}
+                                    value={postContent}
+                                    autoFocus
+                                    margin="dense"
+                                    id="post"
+                                    label="What's happening?"
+                                    type="text"
+                                    fullWidth
+                                    multiline
+                                    rows={4}
+                                />
+                                {error && <Typography variant="secondary">
+                                    {error}
+                                </Typography>}
+                            </DialogContent>
+                            <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
+                                <Box display="flex" justifyContent="start" alignItems="center" gap={1}>
+                                    <IconButton
+                                        sx={{
+                                            "&:hover": {
+                                                color: '#11cc11'
+                                            }
+                                        }}
+                                        color="inherit"
+                                        aria-label="upload media"
+                                    >
+                                        <input
+                                            hidden
+                                            accept="image/*"
+                                            type="file"
+                                            onChange={handleUpload}
+                                        />
+                                        <PhotoLibrary />
+                                    </IconButton>
+                                    <IconButton
+                                        sx={{
+                                            "&:hover": {
+                                                color: '#11cc11'
+                                            }
+                                        }}
+                                        color="inherit"
+                                        aria-label="add gif"
+                                    >
+                                        <GifBox />
+                                    </IconButton>
+                                    <IconButton
+                                        sx={{
+                                            "&:hover": {
+                                                color: '#11cc11'
+                                            }
+                                        }}
+                                        color="inherit"
+                                        aria-label="add emoji"
+                                    >
+                                        <InsertEmoticon />
+                                    </IconButton>
+                                </Box>
+                                <Box display="flex" alignItems="center" gap={2}>
+                                    <Button
+                                        onClick={submitPost}
+                                        variant="contained"
+                                        color="primary"
+                                        endIcon={<Send />}
+                                        sx={{ fontSize: '1rem', fontWeight: '700' }}
+                                    >
+                                        Post
+                                    </Button>
+                                </Box>
+                            </Box>
+                        </Dialog>
                     </Box>
 
                 </Box>

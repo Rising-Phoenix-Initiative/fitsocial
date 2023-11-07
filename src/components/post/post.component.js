@@ -8,8 +8,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 import ShareIcon from '@mui/icons-material/Share';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { getInitials } from '../../utils/get-initials.util';
 
-const Post = ({ content = "Test", likes = 42, comments = 4, initialLiked = false, initialBookmarked = false }) => {
+const Post = ({ post }) => {
+    const { text, user, likes, comments, initialLiked = false, initialBookmarked = false } = post;
+    console.log("post", post);
     const [liked, setLiked] = useState(initialLiked);
     const [bookmarked, setBookmarked] = useState(initialBookmarked);
 
@@ -27,14 +30,17 @@ const Post = ({ content = "Test", likes = 42, comments = 4, initialLiked = false
         <Box sx={{ my: 2, p: 2, border: '1px solid', borderRadius: '16px', borderColor: 'divider', width: '100%' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Avatar sx={{ mr: 1 }}>U</Avatar>
-                    <Typography variant="subtitle2">Username</Typography>
+                    <Avatar sx={{ mr: 1 }}>{getInitials(user?.name)}</Avatar>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                        <Typography variant="subtitle2">{user?.name}</Typography>
+                        <Typography variant="caption">@{user?.username}</Typography>
+                    </Box>
                 </Box>
                 <IconButton>
                     <MoreVertIcon />
                 </IconButton>
             </Box>
-            <Typography sx={{ my: 2 }}>{content}</Typography>
+            <Typography sx={{ my: 2 }}>{text}</Typography>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <IconButton onClick={handleLike} sx={{
