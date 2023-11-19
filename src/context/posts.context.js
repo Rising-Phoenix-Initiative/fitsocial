@@ -14,7 +14,7 @@ const PostsProvider = ({ children }) => {
     const fetchPosts = async () => {
         try {
             const fetchedPosts = await postService.getPosts();
-            setPosts(fetchedPosts);
+            setPosts(fetchedPosts.documents.reverse());
         } catch (err) {
             setError(err.message);
         }

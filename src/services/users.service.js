@@ -1,12 +1,11 @@
 import { account, databases } from './appwrite';
 import { FIT_SOCIAL_DATABASE_ID, USERS_COLLECTION_ID } from './config'
-import { ID, Permission, Role } from 'appwrite';
+import { Permission, Role } from 'appwrite';
 
 // Create a new user both in the account and in the user collection
 export const createUser = async (userData) => {
     try {
         const userCreationResponse = await account.create('unique()', userData.email, userData.password, userData.name);
-        console.log("userCreationResponse", userCreationResponse);
         const userCollectionData = {
             // ... match the structure of your user collection
             name: userData.name,
@@ -14,12 +13,11 @@ export const createUser = async (userData) => {
             birthdate: userData.birthdate,
             gender: userData.gender,
         };
-        console.log("userCollectionData", userCollectionData);
 
         const documentCreationResponse = await databases.createDocument(
             FIT_SOCIAL_DATABASE_ID,
             USERS_COLLECTION_ID,
-            ID.unique(),
+            userCreationResponse.$id,
             userCollectionData,
             // Set permissions if needed
             [Permission.read(Role.any())],
@@ -42,13 +40,39 @@ export const loginUser = async (email, password) => {
     }
 };
 
-// Check current session
+// Get a user by document ID
+export const getUser = async (userId) => {
+    try {
+        const userDocument = await databases.getDocument(
+            FIT_SOCIAL_DATABASE_ID,
+            USERS_COLLECTION_ID,
+            userId,
+        );
+
+        return userDocument;
+    } catch (error) {
+        console.error('Failed to fetch user:', error);
+        throw error;
+    }
+};
+
+// Check current session and get user data
 export const checkCurrentUser = async () => {
     try {
+        // Check if there is a current session
         const session = await account.getSession('current');
-        return session;
+
+        // If there is a session, use the user ID from the session to get the user document
+        const userDocument = await getUser(session.userId)
+
+        // Return both session and user document data
+        return {
+            session: session,
+            user: userDocument
+        };
     } catch (error) {
-        throw error;
+        console.error('Error checking current user:', error);
+        // throw error; // You can handle the error as per your error handling strategy
     }
 };
 

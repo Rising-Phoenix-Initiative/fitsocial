@@ -13,19 +13,18 @@ import Loader from '../loader/loader.component';
 import { useEffect } from 'react';
 
 const Post = ({ post }) => {
-    const { text, user, likes, comments, initialLiked = false, initialBookmarked = false } = post;
+    const { text, name, username, likes, comments, initialLiked = false, initialBookmarked = false } = post;
     const [isLoadingData, setIsLoadingData] = useState(false);
-    console.log("post", post);
     const [liked, setLiked] = useState(initialLiked);
     const [bookmarked, setBookmarked] = useState(initialBookmarked);
 
     useEffect(() => {
-        if (user?.name) {
+        if (name) {
             setIsLoadingData(false);
         } else {
             setIsLoadingData(true);
         }
-    }, [user]);
+    }, [name]);
 
     const handleLike = () => {
         // Here, you would also handle the update to the backend
@@ -43,10 +42,10 @@ const Post = ({ post }) => {
                 <>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Avatar sx={{ mr: 1 }}>{getInitials(user?.name)}</Avatar>
+                            <Avatar sx={{ mr: 1 }}>{getInitials(name)}</Avatar>
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                <Typography variant="subtitle2">{user?.name}</Typography>
-                                <Typography variant="caption">@{user?.username}</Typography>
+                                <Typography variant="subtitle2">{name}</Typography>
+                                <Typography variant="caption">@{username}</Typography>
                             </Box>
                         </Box>
                         <IconButton>

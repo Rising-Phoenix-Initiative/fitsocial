@@ -1,10 +1,11 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkCurrentUser, createUser, loginUser, logoutUser } from '../services/users.service';
+import { useCallback } from 'react';
 
 const initialAuthState = {
     isAuthenticated: false,
-    user: null,
+    user: {},
 };
 
 const AuthContext = createContext({
@@ -16,30 +17,32 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({});
     const [authIsLoading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    useEffect(() => {
+    const checkSession = useCallback(async () => {
         setLoading(true);
-        const session = localStorage.getItem('session');
-        if (session) {
-            setTimeout(() => {
+        try {
+            const data = await checkCurrentUser();
+            if (data.session && data.user) {
+                setTimeout(() => {
+                    setLoading(false);
+                    setIsAuthenticated(true);
+                    setUser(data.user);
+                }, 2000);
+            } else {
                 setLoading(false);
-                setIsAuthenticated(true);
-                setUser(JSON.parse(session));
-            }, 2000);
-        } else {
+            }
+        } catch (error) {
+            console.error('Check Session Error:', error);
             setLoading(false);
         }
     }, []);
 
     const signup = async (userData) => {
         try {
-            const { userCreationResponse, documentCreationResponse } = await createUser(userData);
-            console.log(userCreationResponse);
-            console.log(documentCreationResponse);
-
+            await createUser(userData);
             await login(userData.email, userData.password);
         } catch (error) {
             console.error('Signup Error:', error);
@@ -51,28 +54,11 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             const session = await loginUser(email, password);
-            console.log(session);
             localStorage.setItem('session', JSON.stringify(session));
-            setIsAuthenticated(true);
-            setUser(session);
-            setLoading(false);
+            checkSession();
             navigate('/');
         } catch (error) {
             console.error('Login Error:', error);
-        }
-    };
-
-    const checkSession = async () => {
-        try {
-            const session = await checkCurrentUser();
-            console.log('Session:', session);
-            setIsAuthenticated(true);
-            setUser(session);
-        } catch (error) {
-            console.error('Check Session Error:', error);
-            setIsAuthenticated(false);
-            setUser(null);
-            localStorage.removeItem('session');
         }
     };
 
@@ -93,7 +79,8 @@ export const AuthProvider = ({ children }) => {
     // Check the session on app start
     useEffect(() => {
         checkSession();
-    }, []);
+    }, [checkSession]);
+
 
     return (
         <AuthContext.Provider value={{ authIsLoading, isAuthenticated, user, signup, login, logout }}>
