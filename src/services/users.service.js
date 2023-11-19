@@ -7,7 +7,6 @@ export const createUser = async (userData) => {
     try {
         const userCreationResponse = await account.create('unique()', userData.email, userData.password, userData.name);
         const userCollectionData = {
-            // ... match the structure of your user collection
             name: userData.name,
             username: userData.username,
             birthdate: userData.birthdate,
@@ -19,14 +18,13 @@ export const createUser = async (userData) => {
             USERS_COLLECTION_ID,
             userCreationResponse.$id,
             userCollectionData,
-            // Set permissions if needed
             [Permission.read(Role.any())],
             [Permission.write(Role.user(userCreationResponse.$id))],
         );
 
         return { userCreationResponse, documentCreationResponse };
     } catch (error) {
-        throw error; // Handle the error where this function is called
+        throw error;
     }
 };
 
@@ -59,20 +57,15 @@ export const getUser = async (userId) => {
 // Check current session and get user data
 export const checkCurrentUser = async () => {
     try {
-        // Check if there is a current session
         const session = await account.getSession('current');
-
-        // If there is a session, use the user ID from the session to get the user document
         const userDocument = await getUser(session.userId)
 
-        // Return both session and user document data
         return {
             session: session,
             user: userDocument
         };
     } catch (error) {
         console.error('Error checking current user:', error);
-        // throw error; // You can handle the error as per your error handling strategy
     }
 };
 

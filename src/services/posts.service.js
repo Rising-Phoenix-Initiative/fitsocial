@@ -1,4 +1,3 @@
-// posts.service.js
 import { databases, storage } from './appwrite';
 import { FIT_SOCIAL_DATABASE_ID, POSTS_COLLECTION_ID, USERS_COLLECTION_ID } from './config';
 import { Permission, Role, ID } from 'appwrite';
@@ -78,7 +77,10 @@ export const deletePost = async (postId, userId) => {
         await databases.deleteDocument(
             FIT_SOCIAL_DATABASE_ID,
             POSTS_COLLECTION_ID,
-            postId
+            postId,
+            [
+                Permission.write(Role.user(userId)),
+            ]
         );
         return postId; // Return the id of the deleted post
     } catch (error) {

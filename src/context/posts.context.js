@@ -63,7 +63,6 @@ const PostsProvider = ({ children }) => {
     );
 };
 
-// Custom hook to use the posts context
 export const usePosts = () => React.useContext(PostsContext);
 
 export default PostsProvider;
