@@ -42,8 +42,13 @@ export const AuthProvider = ({ children }) => {
 
     const signup = async (userData) => {
         try {
-            await createUser(userData);
-            await login(userData.email, userData.password);
+            const { userCreationResponse, documentCreationResponse } = await createUser(userData);
+            if (!!userCreationResponse && !!documentCreationResponse) {
+                await login(userData.email, userData.password);
+            }
+            else {
+                console.log("future error handling here")
+            }
         } catch (error) {
             console.error('Signup Error:', error);
         }
