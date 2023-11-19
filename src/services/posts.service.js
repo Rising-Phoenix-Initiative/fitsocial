@@ -1,4 +1,3 @@
-// posts.service.js
 import { databases, storage } from './appwrite';
 import { FIT_SOCIAL_DATABASE_ID, POSTS_COLLECTION_ID, USERS_COLLECTION_ID } from './config';
 import { Permission, Role, ID } from 'appwrite';
@@ -38,11 +37,8 @@ export const uploadImage = async (file) => {
 export const getPosts = async () => {
     try {
         const postsList = await databases.listDocuments(FIT_SOCIAL_DATABASE_ID, POSTS_COLLECTION_ID);
-        const postsWithUserData = await Promise.all(postsList.documents.map(async (post) => {
-            const user = await databases.getDocument(FIT_SOCIAL_DATABASE_ID, USERS_COLLECTION_ID, "65496c123475e142ec09");
-            return { ...post, user };
-        }));
-        return postsWithUserData;
+
+        return postsList;
     } catch (error) {
         throw error;
     }
@@ -81,7 +77,10 @@ export const deletePost = async (postId, userId) => {
         await databases.deleteDocument(
             FIT_SOCIAL_DATABASE_ID,
             POSTS_COLLECTION_ID,
-            postId
+            postId,
+            [
+                Permission.write(Role.user(userId)),
+            ]
         );
         return postId; // Return the id of the deleted post
     } catch (error) {

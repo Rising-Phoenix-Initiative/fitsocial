@@ -45,10 +45,10 @@ const UserSection = styled.div`
 `;
 
 function Navigation() {
-    const [userDropdownAnchorEl, setUserDropdownAnchorEl] = useState(null);
     const { logout, user } = useAuth();
-
     const { createPost } = usePosts();
+
+    const [userDropdownAnchorEl, setUserDropdownAnchorEl] = useState(null);
     const [newPostOpen, setNewPostOpen] = useState(false);
     const [postContent, setPostContent] = useState('');
     const [error, setError] = useState(null);
@@ -56,10 +56,13 @@ function Navigation() {
     const submitPost = async () => {
         const postData = {
             text: postContent,
-            userId: user.userId,
+            userId: user?.$id,
+            name: user?.name,
+            username: user?.username,
         }
+
         try {
-            await createPost(postData, user.userId);
+            await createPost(postData, user?.$id);
             setPostContent('');
             setNewPostOpen(false);
 
@@ -245,8 +248,8 @@ function Navigation() {
                     <Box sx={{ display: 'flex' }}>
                         <Avatar />
                         <Box sx={{ ml: '10px' }}>
-                            <Typography variant="subtitle2">John Doe</Typography>
-                            <Typography variant="subtitle2">@username</Typography>
+                            <Typography variant="subtitle2">{user?.name}</Typography>
+                            <Typography variant="subtitle2">@{user?.username}</Typography>
                         </Box>
                     </Box>
                     <IconButton onClick={handleUserDropdownOpen}>

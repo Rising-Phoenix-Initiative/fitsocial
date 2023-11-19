@@ -14,7 +14,7 @@ const PostsProvider = ({ children }) => {
     const fetchPosts = async () => {
         try {
             const fetchedPosts = await postService.getPosts();
-            setPosts(fetchedPosts);
+            setPosts(fetchedPosts.documents.reverse());
         } catch (err) {
             setError(err.message);
         }
@@ -63,7 +63,6 @@ const PostsProvider = ({ children }) => {
     );
 };
 
-// Custom hook to use the posts context
 export const usePosts = () => React.useContext(PostsContext);
 
 export default PostsProvider;
