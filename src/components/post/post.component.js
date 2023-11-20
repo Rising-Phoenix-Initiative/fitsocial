@@ -11,10 +11,8 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { getInitials } from '../../utils/get-initials.util';
 import Loader from '../loader/loader.component';
 import { useEffect } from 'react';
-import { formatDate } from '../../utils/format-date.util';
 
 const Post = ({ post }) => {
-    console.log("post", post);
     const { text, name, username, likes, comments, initialLiked = false, initialBookmarked = false } = post;
     const [isLoadingData, setIsLoadingData] = useState(false);
     const [liked, setLiked] = useState(initialLiked);
@@ -45,14 +43,9 @@ const Post = ({ post }) => {
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Avatar sx={{ mr: 1 }}>{getInitials(name)}</Avatar>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }} gap={1}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                 <Typography variant="subtitle2">{name}</Typography>
                                 <Typography variant="caption">@{username}</Typography>
-                                <Typography variant="caption">&#8226;</Typography>
-                                <Typography variant="caption">{formatDate(post.$createdAt)}</Typography>
-                                {post.$createdAt !== post.$updatedAt && (
-                                    <Typography variant="caption">(edited)</Typography>
-                                )}
                             </Box>
                         </Box>
                         <IconButton>
