@@ -45,7 +45,7 @@ const Post = ({ post }) => {
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Avatar sx={{ mr: 1 }}>{getInitials(name)}</Avatar>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }} gap={1}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                 <Typography variant="subtitle2">{name}</Typography>
                                 <Typography variant="caption">@{username}</Typography>
                                 <Typography variant="caption">&#8226;</Typography>
