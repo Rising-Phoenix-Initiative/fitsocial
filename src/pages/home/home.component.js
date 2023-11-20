@@ -3,6 +3,7 @@ import Post from '../../components/post/post.component';
 import styled from 'styled-components';
 import { Box } from '@mui/material';
 import { usePosts } from '../../context/posts.context';
+import NoPostsYet from '../../components/post/no-posts-yet.component';
 
 const PostsList = styled(Box)`
   display: flex;
@@ -13,16 +14,25 @@ const PostsList = styled(Box)`
 
 const HomePage = () => {
     const { posts } = usePosts();
-    return (
-        <PostsList>
-            {/* Map through postData to render Post components */}
-            {posts.map(post => {
-                return (
-                    <Post post={post} />
-                )
-            })}
-        </PostsList>
-    )
+
+    if (posts.length === 0) {
+        return (
+            <NoPostsYet />
+        )
+    }
+
+    else {
+        return (
+            <PostsList>
+                {/* Map through postData to render Post components */}
+                {posts.map(post => {
+                    return (
+                        <Post post={post} />
+                    )
+                })}
+            </PostsList>
+        )
+    }
 }
 
 export default HomePage;

@@ -4,19 +4,31 @@ import * as postService from '../services/posts.service';
 export const PostsContext = createContext();
 
 const PostsProvider = ({ children }) => {
+    const [newPostOpen, setNewPostOpen] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [postsLoading, setPostsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         fetchPosts();
     }, []);
 
+    const openNewPost = () => {
+        setNewPostOpen(true);
+    };
+
+    const closeNewPost = () => {
+        setNewPostOpen(false);
+    };
+
     const fetchPosts = async () => {
         try {
             const fetchedPosts = await postService.getPosts();
             setPosts(fetchedPosts.documents.reverse());
+            setPostsLoading(false);
         } catch (err) {
             setError(err.message);
+            setPostsLoading(false);
         }
     };
 
@@ -57,7 +69,18 @@ const PostsProvider = ({ children }) => {
     };
 
     return (
-        <PostsContext.Provider value={{ posts, createPost, fetchPostById, updatePost, deletePost, error }}>
+        <PostsContext.Provider value={{
+            newPostOpen,
+            openNewPost,
+            closeNewPost,
+            posts,
+            postsLoading,
+            createPost,
+            fetchPostById,
+            updatePost,
+            deletePost,
+            error
+        }}>
             {children}
         </PostsContext.Provider>
     );
