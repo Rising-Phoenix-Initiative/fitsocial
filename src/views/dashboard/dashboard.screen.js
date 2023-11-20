@@ -31,6 +31,7 @@ const Dashboard = () => {
             <Box sx={{
                 display: 'flex',
                 flex: 1,
+                width: 'calc(100% - 320px)',
                 flexDirection: 'row',
                 justifyContent: 'space-between'
             }}>

@@ -51,8 +51,9 @@ export const darkTheme = {
     colors: {
         primary: '#11cc11',
         secondary: '#B80C09',
-        background: '#242423',
-        surface: '#434343',
+        background: '#141514',
+        surface: '#232423',
+        border: '#434343',
         onSurface: '#D7CDCC',
         text: '#F7FFF7',
         error: '#FF5757',
