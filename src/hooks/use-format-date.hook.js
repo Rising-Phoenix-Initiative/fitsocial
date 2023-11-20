@@ -7,6 +7,10 @@ export const useFormatDate = (date) => {
     useEffect(() => {
         const momentDate = moment(date);
 
+        if (!momentDate.isValid()) {
+            return;
+        }
+
         const updateFormattedDate = () => {
             const now = moment();
             const diffInSeconds = now.diff(momentDate, 'seconds');
