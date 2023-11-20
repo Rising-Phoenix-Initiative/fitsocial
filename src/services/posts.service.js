@@ -87,3 +87,49 @@ export const deletePost = async (postId, userId) => {
         throw error;
     }
 };
+
+export const addLike = async (postId, userId) => {
+    try {
+        // Fetch the current post
+        const post = await databases.getDocument(FIT_SOCIAL_DATABASE_ID, POSTS_COLLECTION_ID, postId);
+
+        // Add userId to likeIds and increment likes
+        const updatedLikeIds = [...post.likeIds, userId];
+        const updatedLikes = post.likes + 1;
+
+        // Update the post
+        const updatedPost = await databases.updateDocument(
+            FIT_SOCIAL_DATABASE_ID,
+            POSTS_COLLECTION_ID,
+            postId,
+            { likeIds: updatedLikeIds, likes: updatedLikes }
+        );
+
+        return updatedPost;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const removeLike = async (postId, userId) => {
+    try {
+        // Fetch the current post
+        const post = await databases.getDocument(FIT_SOCIAL_DATABASE_ID, POSTS_COLLECTION_ID, postId);
+
+        // Remove userId from likeIds and decrement likes
+        const updatedLikeIds = post.likeIds.filter(id => id !== userId);
+        const updatedLikes = post.likes - 1;
+
+        // Update the post
+        const updatedPost = await databases.updateDocument(
+            FIT_SOCIAL_DATABASE_ID,
+            POSTS_COLLECTION_ID,
+            postId,
+            { likeIds: updatedLikeIds, likes: updatedLikes }
+        );
+
+        return updatedPost;
+    } catch (error) {
+        throw error;
+    }
+};
