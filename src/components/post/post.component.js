@@ -11,12 +11,14 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { getInitials } from '../../utils/get-initials.util';
 import Loader from '../loader/loader.component';
 import { useEffect } from 'react';
+import { useFormatDate } from '../../hooks/use-format-date.hook';
 
 const Post = ({ post }) => {
     const { text, name, username, likes, comments, initialLiked = false, initialBookmarked = false } = post;
     const [isLoadingData, setIsLoadingData] = useState(false);
     const [liked, setLiked] = useState(initialLiked);
     const [bookmarked, setBookmarked] = useState(initialBookmarked);
+    const realTimeDate = useFormatDate(post.$createdAt);
 
     useEffect(() => {
         if (name) {
@@ -46,6 +48,11 @@ const Post = ({ post }) => {
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                 <Typography variant="subtitle2">{name}</Typography>
                                 <Typography variant="caption">@{username}</Typography>
+                                <Typography variant="caption">&#8226;</Typography>
+                                <Typography variant="caption">{realTimeDate}</Typography>
+                                {post.$createdAt !== post.$updatedAt && (
+                                    <Typography variant="caption">(edited)</Typography>
+                                )}
                             </Box>
                         </Box>
                         <IconButton>
