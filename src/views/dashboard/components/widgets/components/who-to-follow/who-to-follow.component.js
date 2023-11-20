@@ -19,16 +19,7 @@ const WhoToFollow = () => {
             <List sx={{ width: '100%' }}>
                 {suggestedUsers.map((user, index) => (
                     <React.Fragment key={user.username}>
-                        {index > 0 && (
-                            <Divider
-                                variant="inset"
-                                component="li"
-                                sx={{
-                                    marginLeft: 0,
-                                    width: '100%',
-                                }}
-                            />
-                        )}
+                        {index > 0 && <Divider />}
                         <ListItem sx={{ p: '10px 20px' }}>
                             <ListItemAvatar>
                                 <Avatar>{getInitials(user.name)}</Avatar>
@@ -39,10 +30,10 @@ const WhoToFollow = () => {
                     </React.Fragment>
                 ))}
             </List>
+            <Divider />
             <Box sx={{ display: 'flex', justifyContent: 'center', p: '10px 20px' }}>
                 <Button size="small">Show more</Button>
             </Box>
-
         </WidgetContainer>
     )
 }

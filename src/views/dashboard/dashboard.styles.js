@@ -1,10 +1,18 @@
 import { Box } from '@mui/material';
 import styled from 'styled-components';
 
-export const DashboardContainer = styled.div`
+export const DashboardContainer = styled(Box)`
   display: flex;
   height: 100vh;
   margin: 0 10%;
+`;
+
+export const Wrapper = styled(Box)`
+  display: flex;
+  flex: 1;
+  width: calc(100% - 320px);
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 
