@@ -18,7 +18,7 @@ const NewPostDialog = () => {
     const [postContent, setPostContent] = useState('');
     const [error, setError] = useState(null);
 
-    const { createPost, newPostOpen, closeNewPost } = usePosts();
+    const { createPost, submitting, newPostOpen, closeNewPost } = usePosts();
     const { user } = useAuth();
 
     const submitPost = async () => {
@@ -121,6 +121,7 @@ const NewPostDialog = () => {
                 <Box display="flex" alignItems="center" gap={2}>
                     <Button
                         onClick={submitPost}
+                        disabled={submitting}
                         variant="contained"
                         color="primary"
                         endIcon={<Send />}

@@ -12,25 +12,59 @@ import { getInitials } from '../../utils/get-initials.util';
 import Loader from '../loader/loader.component';
 import { useEffect } from 'react';
 import { useFormatDate } from '../../hooks/use-format-date.hook';
+import { useAuth } from '../../context/auth.context';
+import { usePosts } from '../../context/posts.context';
 
 const Post = ({ post }) => {
-    const { text, name, username, likes, comments, initialLiked = false, initialBookmarked = false } = post;
-    const [isLoadingData, setIsLoadingData] = useState(false);
-    const [liked, setLiked] = useState(initialLiked);
-    const [bookmarked, setBookmarked] = useState(initialBookmarked);
+    const {
+        text,
+        name,
+        username,
+        likes,
+        likeIds,
+        comments,
+        initialLiked = false,
+        initialBookmarked = false
+    } = post;
+    const { user } = useAuth();
+    const { addLikeToPost, removeLikeFromPost } = usePosts();
+
     const realTimeDate = useFormatDate(post.$createdAt);
+    const [isLoadingData, setIsLoadingData] = useState(false);
+
+    const [liked, setLiked] = useState(initialLiked);
+    const [likesCount, setLikesCount] = useState(likes);
+    const [likeIdsState, setLikeIds] = useState(likeIds);
+    const [isLikeButtonDisabled, setIsLikeButtonDisabled] = useState(false);
+    const [bookmarked, setBookmarked] = useState(initialBookmarked);
 
     useEffect(() => {
         if (name) {
+            if (likeIds.includes(user.$id)) {
+                setLiked(true);
+            } else {
+                setLiked(false);
+            }
             setIsLoadingData(false);
         } else {
             setIsLoadingData(true);
         }
-    }, [name]);
+    }, [name, likeIds, user]);
 
-    const handleLike = () => {
-        // Here, you would also handle the update to the backend
-        setLiked(!liked);
+    const handleLike = async () => {
+        setIsLikeButtonDisabled(true);
+        if (likeIdsState.includes(user.$id)) {
+            setLiked(false);
+            setLikesCount(likesCount - 1); // Decrement likes
+            setLikeIds(likeIdsState.filter(id => id !== user.$id)); // Remove userId from likeIds
+            await removeLikeFromPost(post.$id, user.$id);
+        } else {
+            setLiked(true);
+            setLikesCount(likesCount + 1); // Increment likes
+            setLikeIds([...likeIdsState, user.$id]); // Add userId to likeIds
+            await addLikeToPost(post.$id, user.$id);
+        }
+        setIsLikeButtonDisabled(false)
     };
 
     const handleBookmark = () => {
@@ -82,15 +116,22 @@ const Post = ({ post }) => {
                     </Typography>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <IconButton onClick={handleLike} sx={{
-                                color: liked && 'iconHover.heart',
-                                '&:hover': {
-                                    color: 'iconHover.heart',
-                                }
-                            }} aria-label="like post">
+                            <IconButton
+                                disabled={isLikeButtonDisabled}
+                                onClick={handleLike}
+                                sx={{
+                                    color: liked && 'iconHover.heart',
+                                    '&:hover': {
+                                        color: 'iconHover.heart',
+                                    },
+                                    '&:disabled': {
+                                        color: liked && 'iconHover.heart',
+                                    }
+                                }}
+                                aria-label="like post">
                                 <FavoriteIcon />
                             </IconButton>
-                            {likes}
+                            {likesCount}
                             <IconButton icon="comment" sx={{
                                 ml: 2,
                                 '&:hover': {

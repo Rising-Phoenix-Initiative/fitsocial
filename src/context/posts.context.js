@@ -7,6 +7,7 @@ const PostsProvider = ({ children }) => {
     const [newPostOpen, setNewPostOpen] = useState(false);
     const [posts, setPosts] = useState([]);
     const [postsLoading, setPostsLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -33,12 +34,14 @@ const PostsProvider = ({ children }) => {
     };
 
     const createPost = async (postData, userId) => {
+        setSubmitting(true);
         try {
             const newPost = await postService.createPost(postData, userId);
             setPosts([newPost, ...posts]);
         } catch (err) {
             setError(err.message);
         }
+        setSubmitting(false);
     };
 
     const fetchPostById = async (postId) => {
@@ -68,6 +71,26 @@ const PostsProvider = ({ children }) => {
         }
     };
 
+    const addLikeToPost = async (postId, userId) => {
+        try {
+            const updatedPost = await postService.addLike(postId, userId);
+            // Update the local state to reflect the new like
+            setPosts(posts.map(post => post.id === postId ? updatedPost : post));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const removeLikeFromPost = async (postId, userId) => {
+        try {
+            const updatedPost = await postService.removeLike(postId, userId);
+            // Update the local state to reflect the removed like
+            setPosts(posts.map(post => post.id === postId ? updatedPost : post));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <PostsContext.Provider value={{
             newPostOpen,
@@ -76,9 +99,12 @@ const PostsProvider = ({ children }) => {
             posts,
             postsLoading,
             createPost,
+            submitting,
             fetchPostById,
             updatePost,
             deletePost,
+            addLikeToPost,
+            removeLikeFromPost,
             error
         }}>
             {children}
