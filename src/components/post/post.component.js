@@ -39,7 +39,20 @@ const Post = ({ post }) => {
     };
 
     return (
-        <Box sx={{ my: 2, p: 2, border: '1px solid', borderRadius: '16px', borderColor: 'divider', width: '100%' }}>
+        <Box sx={{
+            py: 2,
+            px: 4,
+            maxWidth: '100%',
+            borderBottom: '1px solid',
+            borderColor: 'background.border',
+
+            "&:hover": {
+                backgroundColor: 'background.paper',
+                cursor: 'pointer',
+                transition: 'background-color 0.2s ease-in-out',
+            }
+        }}
+        >
             {isLoadingData ? <Loader size={50} sx={{ width: '100%', height: '100%', background: 'transparent', py: '50px' }} /> : (
                 <>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -59,11 +72,17 @@ const Post = ({ post }) => {
                             <MoreVertIcon />
                         </IconButton>
                     </Box>
-                    <Typography sx={{ my: 2 }}>{text}</Typography>
+                    <Typography sx={{
+                        my: 3,
+                        mx: 1,
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word'
+                    }}>
+                        {text}
+                    </Typography>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton onClick={handleLike} sx={{
-                                mr: 1,
                                 color: liked && 'iconHover.heart',
                                 '&:hover': {
                                     color: 'iconHover.heart',

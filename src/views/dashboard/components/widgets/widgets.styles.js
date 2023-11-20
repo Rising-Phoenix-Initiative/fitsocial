@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const WidgetContainer = styled(Box)`
   background-color: ${(props) => props.theme.colors.background};
-  border: 1px solid ${(props) => props.theme.colors.surface};
+  border: 1px solid ${(props) => props.theme.colors.border};
   border-radius: ${(props) => props.theme.borderRadius};
   font-family: ${(props) => props.theme.fonts.primary};
   height: auto;
@@ -23,7 +23,7 @@ export const SearchBar = styled.div`
   align-items: center;
   justify-self: flex-start;
   background-color: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 16px;
   padding: 8px;
   margin: 0;
