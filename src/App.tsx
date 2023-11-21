@@ -15,12 +15,12 @@ import { useAuth } from "./context/auth.context";
 import Loader from "./components/loader/loader.component";
 
 const App = () => {
-  const { isAuthenticated, authIsLoading } = useAuth();
+  const { isAuthenticated, authenticating } = useAuth();
   const { theme } = useContext(ThemeProviderContext);
   const currentTheme = theme === 'light' ? lightTheme : darkTheme;
   const muiTheme = createMuiTheme(currentTheme);
 
-  console.log("authIsLoading", authIsLoading);
+  console.log("authIsLoading", authenticating);
 
   return (
     <StyledComponentsThemeProvider theme={currentTheme}>
@@ -30,7 +30,7 @@ const App = () => {
         </Helmet>
         <GlobalStyle />
         <MuiGlobalStyles />
-        {authIsLoading ? <Loader /> : (isAuthenticated ? <Dashboard /> : <Landing />)}
+        {authenticating ? <Loader /> : (isAuthenticated ? <Dashboard /> : <Landing />)}
       </MuiComponentsThemeProvider>
     </StyledComponentsThemeProvider>
   );

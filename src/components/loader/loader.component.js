@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, CircularProgress } from "@mui/material";
 
-const Loader = ({ sx, size = 100 }) => {
+const Loader = ({ sx = {}, size = 100 }) => {
     return (
         <Box sx={{
             display: 'flex',

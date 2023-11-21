@@ -31,33 +31,3 @@ export const createUser = async (userData) => {
         throw error; // Handle the error where this function is called
     }
 };
-
-// Login a user
-export const loginUser = async (email, password) => {
-    try {
-        const session = await account.createEmailSession(email, password);
-        return session;
-    } catch (error) {
-        throw error;
-    }
-};
-
-// Check current session
-export const checkCurrentUser = async () => {
-    try {
-        const session = await account.getSession('current');
-        return session;
-    } catch (error) {
-        throw error;
-    }
-};
-
-// Logout the current user
-export const logoutUser = async () => {
-    try {
-        await account.deleteSession('current');
-        return true;
-    } catch (error) {
-        throw error;
-    }
-};
