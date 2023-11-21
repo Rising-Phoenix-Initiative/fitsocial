@@ -31,7 +31,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { NavigationContainer } from './navigation.styles';
 import { useAuth } from '../../../../context/auth.context';
-import NewPostDialog from '../../../../components/post/new-post-dialog.component';
 import { usePosts } from '../../../../context/posts.context';
 
 const UserSection = styled.div`
@@ -45,7 +44,6 @@ function Navigation() {
     const { openNewPost } = usePosts();
 
     const [userDropdownAnchorEl, setUserDropdownAnchorEl] = useState(null);
-    const [newPostOpen, setNewPostOpen] = useState(false);
 
     const handleUserDropdownOpen = (event) => {
         setUserDropdownAnchorEl(event.currentTarget);
@@ -124,7 +122,6 @@ function Navigation() {
                         >
                             New Post
                         </Button>
-                        <NewPostDialog open={newPostOpen} onClose={() => setNewPostOpen(false)} />
                     </Box>
 
                 </Box>

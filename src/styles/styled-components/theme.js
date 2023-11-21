@@ -56,7 +56,7 @@ export const darkTheme = {
         border: '#434343',
         onSurface: '#D7CDCC',
         text: '#F7FFF7',
-        error: '#FF5757',
+        error: '#B80C09',
         onPrimary: '#000000',
         blue: "#3498db",
     },
