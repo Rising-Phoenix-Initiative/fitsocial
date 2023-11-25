@@ -54,6 +54,7 @@ const Post = ({ post }) => {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
+    // BUG HERE when deleting a post
     useEffect(() => {
         if (name) {
             if (likeIds.includes(user.$id)) {
