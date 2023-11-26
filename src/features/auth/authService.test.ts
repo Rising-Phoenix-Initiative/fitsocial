@@ -20,9 +20,9 @@ describe('AuthService', () => {
     describe('login', () => {
         it('should return a User if given valid credentials', async () => {
             const mockLogin = setUpSuccessMockLogin()
-            const user = await login('validEmail', 'validPassword')
+            const user = await login({email: 'validEmail', password: 'validPassword'})
             
-            expect(mockLogin).toHaveBeenCalledWith('validEmail', 'validPassword')
+            expect(mockLogin).toHaveBeenCalledWith({email: 'validEmail', password: 'validPassword'})
             expect(user).toHaveProperty('email')
         })
 
@@ -30,7 +30,7 @@ describe('AuthService', () => {
             const mockLogin = setUpFailureMockLogin()
 
             try {
-                await login('validEmail', 'badPassword')
+                await login({email: 'validEmail', password: 'badPassword'})
                 expect(true).toBe(false)
             } catch (error){
                 expect(error.message).toMatch('Invalid credentials')
