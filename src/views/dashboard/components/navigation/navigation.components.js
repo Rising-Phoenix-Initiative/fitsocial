@@ -37,6 +37,7 @@ import { NavigationContainer } from './navigation.styles';
 import { useAuth } from '../../../../context/auth.context';
 import { usePosts } from '../../../../context/posts.context';
 import { uploadImage } from '../../../../services/posts.service';
+import { logout } from '../../../../features/auth/authService';
 
 const UserSection = styled.div`
   display: flex;
@@ -46,7 +47,7 @@ const UserSection = styled.div`
 
 function Navigation() {
     const [userDropdownAnchorEl, setUserDropdownAnchorEl] = useState(null);
-    const { logout, user } = useAuth();
+    const { user } = useAuth();
 
     const { createPost } = usePosts();
     const [newPostOpen, setNewPostOpen] = useState(false);

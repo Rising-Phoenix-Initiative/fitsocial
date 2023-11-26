@@ -3,11 +3,11 @@ import { Button, TextField, Box, Typography, FormControl, InputAdornment, IconBu
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useAuth } from '../../../../context/auth.context';
+import { login } from '../../../../features/auth/authService';
+import { LoginType } from '../../../../features/auth/_types/Login';
 
 const Login = () => {
     const [showPassword, setShowPassword] = React.useState(false);
-    const { login } = useAuth()
 
     const handleClickShowPassword = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -24,8 +24,8 @@ const Login = () => {
             password: '',
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            login(values.email, values.password)
+        onSubmit: ({email, password}: LoginType) => {
+            login({email, password})
         },
     });
 
