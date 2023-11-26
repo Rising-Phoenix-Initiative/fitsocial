@@ -20,8 +20,6 @@ const App = () => {
   const currentTheme = theme === 'light' ? lightTheme : darkTheme;
   const muiTheme = createMuiTheme(currentTheme);
 
-  console.log("authIsLoading", authIsLoading);
-
   return (
     <StyledComponentsThemeProvider theme={currentTheme}>
       <MuiComponentsThemeProvider theme={muiTheme}>

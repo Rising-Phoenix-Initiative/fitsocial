@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IconButton, InputBase } from '@mui/material';
 import { SearchBar, SearchContainer } from './widgets.styles';
 import { Search } from '@mui/icons-material';
-import UserStats from './components/user-stats/user-stats.component';
+// import UserStats from './components/user-stats/user-stats.component';
 import WhoToFollow from './components/who-to-follow/who-to-follow.component';
 
 const Widgets = ({ user }) => {
@@ -17,7 +17,7 @@ const Widgets = ({ user }) => {
         </SearchBar>
       </SearchContainer>
       <WhoToFollow />
-      <UserStats user={user} />
+      {/* <UserStats user={user} /> */}
     </>
   );
 };

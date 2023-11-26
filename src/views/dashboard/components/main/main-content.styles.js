@@ -5,9 +5,10 @@ export const MainContentContainer = styled.main`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  max-width: 700px;
   position: relative;
   overflow-y: auto;
-  border-right: 1px solid ${({ theme }) => theme.colors.surface};
+  border-right: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 export const MainContentTitle = styled(Box)`
@@ -20,5 +21,5 @@ export const MainContentTitle = styled(Box)`
   z-index: 111;
   width: 100%;
   padding: 20px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.surface};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `

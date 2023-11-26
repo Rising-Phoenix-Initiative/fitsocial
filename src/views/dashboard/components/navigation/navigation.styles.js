@@ -10,5 +10,5 @@ export const NavigationContainer = styled(Box)`
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    border-right: 1px solid ${({ theme }) => theme.colors.surface};
+    border-right: 1px solid ${({ theme }) => theme.colors.border};
 `;
