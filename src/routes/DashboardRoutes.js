@@ -5,16 +5,16 @@ import ExplorePage from "../pages/explore/explore.component";
 
 const DashboardRoutes = () => {
     const { isAuthenticated } = useAuth();
-
+    console.log("isAuthenticated: ", isAuthenticated);
     return (
         <Routes>
-            <Route exact path="/home" element={<HomePage />} />
-            <Route exact path="/explore" element={<ExplorePage />} />
-            {/* <Route exact path="/bookmarks" element={<BookmarksPage />} />
-            <Route exact path="/notifications" element={<NotificationsPage />} />
-            <Route exact path="/messages" element={<MessagesPage />} />
-            <Route exact path="/profile" element={<ProfilePage />} />
-            <Route exact path="/groups" element={<GroupsPage />} /> */}
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/explore" element={<ExplorePage />} />
+            {/* <Route path="/bookmarks" element={<BookmarksPage />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
+            <Route path="/messages" element={<MessagesPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/groups" element={<GroupsPage />} /> */}
 
             {/* Redirect all unmatched routes to the homepage */}
             <Route path="*" element={<Navigate to="/" replace />} />

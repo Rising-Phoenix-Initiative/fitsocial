@@ -1,10 +1,18 @@
-import * as React from 'react';
-import { Button, TextField, Box, Typography, FormControl, InputAdornment, IconButton } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { login } from '../../../../features/auth/authService';
-import { LoginType } from '../../../../features/auth/_types/Login';
+import * as React from "react";
+import {
+    Button,
+    TextField,
+    Box,
+    Typography,
+    FormControl,
+    InputAdornment,
+    IconButton,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { loginUser } from "../../../../features/auth/authService";
+import { LoginType } from "../../../../features/auth/_types/Login";
 
 const Login = () => {
     const [showPassword, setShowPassword] = React.useState(false);
@@ -14,18 +22,18 @@ const Login = () => {
     };
 
     const validationSchema = Yup.object({
-        email: Yup.string().email('Invalid email format').required('Required'),
-        password: Yup.string().required('No password provided.'),
+        email: Yup.string().email("Invalid email format").required("Required"),
+        password: Yup.string().required("No password provided."),
     });
 
     const formik = useFormik({
         initialValues: {
-            email: '',
-            password: '',
+            email: "",
+            password: "",
         },
         validationSchema: validationSchema,
-        onSubmit: ({email, password}: LoginType) => {
-            login({email, password})
+        onSubmit: ({ email, password }: LoginType) => {
+            loginUser({ email, password });
         },
     });
 
@@ -35,9 +43,9 @@ const Login = () => {
             onSubmit={formik.handleSubmit}
             noValidate
             sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
             }}
         >
             <Typography component="h1" variant="h5">
@@ -64,13 +72,18 @@ const Login = () => {
                     fullWidth
                     name="password"
                     label="Password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     autoComplete="current-password"
                     value={formik.values.password}
                     onChange={formik.handleChange}
-                    error={formik.touched.password && Boolean(formik.errors.password)}
-                    helperText={formik.touched.password && formik.errors.password}
+                    error={
+                        formik.touched.password &&
+                        Boolean(formik.errors.password)
+                    }
+                    helperText={
+                        formik.touched.password && formik.errors.password
+                    }
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -79,7 +92,11 @@ const Login = () => {
                                     onClick={handleClickShowPassword}
                                     edge="end"
                                 >
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    {showPassword ? (
+                                        <VisibilityOff />
+                                    ) : (
+                                        <Visibility />
+                                    )}
                                 </IconButton>
                             </InputAdornment>
                         ),
@@ -96,6 +113,6 @@ const Login = () => {
             </FormControl>
         </Box>
     );
-}
+};
 
 export default Login;

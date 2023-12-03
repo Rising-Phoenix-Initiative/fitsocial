@@ -185,6 +185,7 @@ const Post = ({ post }) => {
                                 transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                                 anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
                             >
+                                {console.log('user', user)}
                                 {post.userId === user.$id ? (
                                     <>
                                         <MenuItem onClick={handleEdit}>

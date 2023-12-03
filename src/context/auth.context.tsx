@@ -1,47 +1,54 @@
-import React, { createContext, useState, useContext, useEffect, ReactNode, FC } from 'react';
-import  User, { UserType } from '../features/user/_types/User';
-import useAuthProvider from '../features/auth/_hooks/useAuthProvider';
-import { Models } from 'appwrite';
-
-export type AuthContextType = {
-    authenticating: boolean,
-    currentSession?: Models.Session|null
-    isAuthenticated: boolean,
-    user?: UserType|Models.Session|null,
-    login: () => void,
-    logout: () => void,
-    signup: () => void,
-}
+import React, {
+    createContext,
+    useState,
+    useContext,
+    useEffect,
+    ReactNode,
+    FC,
+} from "react";
+import User, { UserType } from "../features/user/_types/User";
+import useAuthProvider from "../features/auth/_hooks/useAuthProvider";
+import { Models } from "appwrite";
 
 type AuthProviderProps = {
-    children: ReactNode
-}
+    children: ReactNode;
+};
 
+export type AuthContextType = {
+    authenticating: boolean;
+    isAuthenticated: boolean;
+    user: UserType | null;
+    login: (email: string, password: string) => void;
+    logout: () => void;
+    signup: (userData: UserType) => void;
+};
+
+// Initial State
 const initialAuthState: AuthContextType = {
     authenticating: false,
-    currentSession: null,
     isAuthenticated: false,
     user: null,
-    login: () => { },
-    logout: () => { },
-    signup: () => { },
+    login: () => {},
+    logout: () => {},
+    signup: () => {},
 };
 
+// Context
 export const AuthContext = createContext<AuthContextType>(initialAuthState);
 
-export const AuthProvider: FC<AuthProviderProps> = ({ children }: AuthProviderProps) => {
-    
-    const authState = useAuthProvider(initialAuthState)
-    // Below is the content from the JS instance of auth.context which will be needed for the handle updates
-   
+// AuthProvider Component
+const AuthProvider: FC<any> = ({ children }) => {
+    console.log("initialAuthState", initialAuthState);
+    const authState = useAuthProvider(initialAuthState);
+    console.log("authState", authState);
+
     return (
-        <AuthContext.Provider value={authState}>
+        <AuthContext.Provider value={{ ...authState }}>
             {children}
-        </AuthContext.Provider>)
-
+        </AuthContext.Provider>
+    );
 };
 
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
+export default AuthProvider;

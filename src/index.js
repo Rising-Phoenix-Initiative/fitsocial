@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client'
 import App from './App';
-import { ThemeProvider } from './context/theme.context';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider } from './context/auth.context';
 import PostsProvider from './context/posts.context';
+import ThemeProvider from './context/theme.context';
+import AuthProvider from './context/auth.context.tsx';
 
 const rootElement = document.getElementById('root')
 const root = createRoot(rootElement)
