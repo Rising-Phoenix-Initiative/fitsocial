@@ -103,6 +103,15 @@ const GlobalStyle = createGlobalStyle`
   main::-webkit-scrollbar {
       margin-top: 80px; 
   }
+
+  a, a:visited {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.text};
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `;
 
 export default GlobalStyle;

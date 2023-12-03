@@ -21,6 +21,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditPost from './edit-post.component';
 import DeletePostDialog from './delete-post.component';
+import { Link, Navigate } from 'react-router-dom';
 
 const Post = ({ post }) => {
     const {
@@ -138,28 +139,32 @@ const Post = ({ post }) => {
                 borderBottom: '1px solid',
                 borderColor: 'background.border',
 
-                "&:hover": {
-                    backgroundColor: 'background.paper',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.2s ease-in-out',
-                }
+                // "&:hover": {
+                //     backgroundColor: 'background.paper',
+                //     cursor: 'pointer',
+                //     transition: 'background-color 0.2s ease-in-out',
+                // }
             }}
             >
                 {isLoadingData ? <Loader size={50} sx={{ width: '100%', height: '100%', background: 'transparent', py: '50px' }} /> : (
                     <>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Avatar sx={{ mr: 1 }}>{getInitials(name)}</Avatar>
-                                <Box sx={{ display: 'flex', alignItems: 'center' }} gap={1}>
-                                    <Typography variant="subtitle2">{name}</Typography>
-                                    <Typography variant="caption">@{username}</Typography>
-                                    <Typography variant="caption">&#8226;</Typography>
-                                    <Typography variant="caption">{realTimeDate}</Typography>
-                                    {post.edited && (
-                                        <Typography variant="caption">(edited)</Typography>
-                                    )}
+                            <Link to={`/profile/${post.userId}`}>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Avatar sx={{ mr: 1 }}>{getInitials(name)}</Avatar>
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }} gap={1}>
+                                        <Typography variant="subtitle2">{name}</Typography>
+                                        <Typography variant="caption">
+                                            @{username}
+                                        </Typography>
+                                        <Typography variant="caption">&#8226;</Typography>
+                                        <Typography variant="caption">{realTimeDate}</Typography>
+                                        {post.edited && (
+                                            <Typography variant="caption">(edited)</Typography>
+                                        )}
+                                    </Box>
                                 </Box>
-                            </Box>
+                            </Link>
                             <IconButton onClick={handleMenuDropdownOpen}>
                                 <MoreVertIcon />
                             </IconButton>
@@ -167,46 +172,48 @@ const Post = ({ post }) => {
                                 anchorEl={MenuDropdownAnchorEl}
                                 open={Boolean(MenuDropdownAnchorEl)}
                                 onClose={() => setMenuDropdownAnchorEl(null)}
-                                PaperProps={{
-                                    elevation: 0,
-                                    sx: {
-                                        overflow: 'visible',
-                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                        mb: 1.5,
-                                        p: 1,
-                                        '& .MuiAvatar-root': {
-                                            width: 32,
-                                            height: 32,
-                                            ml: -0.5,
-                                            mr: 1,
+                                slotProps={{
+                                    paper: {
+                                        elevation: 0,
+                                        sx: {
+                                            overflow: 'visible',
+                                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                            mb: 1.5,
+                                            p: 1,
+                                            '& .MuiAvatar-root': {
+                                                width: 32,
+                                                height: 32,
+                                                ml: -0.5,
+                                                mr: 1,
+                                            },
                                         },
-                                    },
+                                    }
                                 }}
                                 transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                                 anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
                             >
                                 {post.userId === user.$id ? (
-                                    <>
+                                    [
                                         <MenuItem onClick={handleEdit}>
                                             <ListItemIcon><EditIcon /></ListItemIcon>
                                             <ListItemText primary="Edit Post" />
-                                        </MenuItem>
+                                        </MenuItem>,
                                         <MenuItem onClick={handleDelete}>
                                             <ListItemIcon><DeleteForeverIcon /></ListItemIcon>
                                             <ListItemText primary="Delete Post" />
                                         </MenuItem>
-                                    </>
+                                    ]
                                 ) : (
-                                    <>
+                                    [
                                         <MenuItem>
                                             <ListItemIcon><PersonAddIcon /></ListItemIcon>
                                             <ListItemText primary="Follow User" />
-                                        </MenuItem>
+                                        </MenuItem>,
                                         <MenuItem>
                                             <ListItemIcon><BlockIcon /></ListItemIcon>
                                             <ListItemText primary="Block User" />
                                         </MenuItem>
-                                    </>
+                                    ]
                                 )}
                             </Menu>
                         </Box>

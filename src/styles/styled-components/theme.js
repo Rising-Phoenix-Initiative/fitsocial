@@ -41,6 +41,7 @@ export const lightTheme = {
         error: '#B80C09',
         onPrimary: '#F7FFF7',
         blue: "#3498db",
+        link: "#6fbaed"
     },
 };
 
@@ -59,5 +60,6 @@ export const darkTheme = {
         error: '#B80C09',
         onPrimary: '#000000',
         blue: "#3498db",
+        link: "#6fbaed"
     },
 };
