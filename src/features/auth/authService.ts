@@ -1,6 +1,6 @@
 import { Models } from 'appwrite';
 import { account } from '../../services/appwrite';
-import { createUser } from '../../services/users.service';
+import { createUser, getUser } from '../../services/users.service';
 import User, { UserType } from '../user/_types/User';
 import { LoginType } from './_types/Login';
 import { SignUpType } from './_types/SignUp';
@@ -67,3 +67,17 @@ export async function checkSession() {
         }
         return sessionState
 }
+
+export const checkCurrentUser = async () => {
+    try {
+        const session = await account.getSession('current');
+        const userDocument = await getUser(session.userId)
+
+        return {
+            session: session,
+            user: userDocument
+        };
+    } catch (error) {
+        console.error('Error checking current user:', error);
+    }
+};

@@ -87,17 +87,17 @@ const GlobalStyle = createGlobalStyle`
 
   ::-webkit-scrollbar {
       width: 5px;
-      background-color: transparent;
+      background-color: #111;
   }
 
   ::-webkit-scrollbar-thumb {
-      background-color: ${({ theme }) => theme.colors.surface};
+      background-color: ${({ theme }) => theme.colors.border};
       border-radius: 8px;
   }
 
   * {
       scrollbar-width: 5px;
-      scrollbar-color: ${({ theme }) => theme.colors.surface} transparent;
+      scrollbar-color: ${({ theme }) => theme.colors.border} transparent;
   }
 
   main::-webkit-scrollbar {

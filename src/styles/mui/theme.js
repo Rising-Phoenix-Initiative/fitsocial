@@ -18,6 +18,7 @@ export const createMuiTheme = (customTheme) => {
             background: {
                 default: customTheme.colors.background, // background color of the app
                 paper: customTheme.colors.surface, // background color of paper-based components
+                border: customTheme.colors.border, // background color of borders
             },
             text: {
                 primary: customTheme.colors.text, // primary text color
