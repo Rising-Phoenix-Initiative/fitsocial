@@ -1,9 +1,10 @@
 import { Models } from 'appwrite';
 import { account } from '../../services/appwrite';
-import { createUser, getUser } from '../../services/users.service';
+
 import User, { UserType } from '../user/_types/User';
 import { LoginType } from './_types/Login';
 import { SignUpType } from './_types/SignUp';
+import { createUser, getUser } from '../../services/users.service';
 
 
 export async function login({email, password}: LoginType): Promise<UserType> {

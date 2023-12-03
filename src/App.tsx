@@ -20,11 +20,6 @@ const App = () => {
   const currentTheme = theme === 'light' ? lightTheme : darkTheme;
   const muiTheme = createMuiTheme(currentTheme);
 
-<<<<<<< HEAD:src/App.tsx
-  console.log("authIsLoading", authenticating);
-
-=======
->>>>>>> origin/main:src/App.js
   return (
     <StyledComponentsThemeProvider theme={currentTheme}>
       <MuiComponentsThemeProvider theme={muiTheme}>
