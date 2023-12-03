@@ -1,3 +1,4 @@
+import { Models } from 'appwrite';
 import { account } from '../../services/appwrite';
 import { createUser } from '../../services/users.service';
 import User, { UserType } from '../user/_types/User';
@@ -30,7 +31,7 @@ export async function logout() {
     }
 };
 
-export async function getCurrentSession() {
+export async function getCurrentSession(): Promise<Models.Session> {
     try {
         const session = await account.getSession('current');
         return session;
@@ -49,4 +50,20 @@ export async function signup(userData: SignUpType){
         } catch (error) {
             console.error('Signup Error:', error);
         }
+}
+
+export async function checkSession() {
+    let sessionState = false
+
+         try {
+            const session = await getCurrentSession();
+            console.log('Session:', session);
+
+            sessionState = true
+        } catch (error) {
+            console.error('Check Session Error:', error);
+
+            localStorage.removeItem('session');
+        }
+        return sessionState
 }

@@ -1,15 +1,13 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode, FC } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { createUser } from '../services/users.service';
-import  { UserType } from '../features/user/_types/User';
-// import { getCurrentSession, login } from '../features/auth/authService';
-// import { LoginType } from '../features/auth/_types/Login';
-// import { SignUpType } from '../features/auth/_types/SignUp';
+import  User, { UserType } from '../features/user/_types/User';
+import useAuthProvider from '../features/auth/_hooks/useAuthProvider';
+import { Models } from 'appwrite';
 
-type AuthContextType = {
+export type AuthContextType = {
     authenticating: boolean,
+    currentSession?: Models.Session|null
     isAuthenticated: boolean,
-    user: UserType|null,
+    user?: UserType|Models.Session|null,
 }
 
 type AuthProviderProps = {
@@ -18,6 +16,7 @@ type AuthProviderProps = {
 
 const initialAuthState: AuthContextType = {
     authenticating: false,
+    currentSession: null,
     isAuthenticated: false,
     user: null,
 };
@@ -25,9 +24,9 @@ const initialAuthState: AuthContextType = {
 export const AuthContext = createContext<AuthContextType>(initialAuthState);
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }: AuthProviderProps) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState<UserType|null>(null);
+    const {authenticating, currentSession, isAuthenticated, user} = useAuthProvider()
+    // TODO: I think we need a user lookup that's less expensive and with the ability to control more features to our app.
+    
     // const navigate = useNavigate();
     // const toggleLoading = () => setLoading((prev) => !prev)
     // const handleUserUpdate = (user: UserType) => {
@@ -35,20 +34,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }: AuthProviderPr
     //     setIsAuthenticated((prev) => !prev);
     //     setUser(user);
     // }
-
-    useEffect(() => {
-        setLoading(true);
-        const session = localStorage.getItem('session');
-        if (session) {
-            setTimeout(() => {
-                setLoading(false);
-                setIsAuthenticated(true);
-                setUser(JSON.parse(session));
-            }, 2000);
-        } else {
-            setLoading(false);
-        }
-    }, []);
     
     // async function authenticateUser(userData: LoginType, toggleLoading: Function, handleUserUpdate: Function) {
     //     const { email, password } = userData
@@ -82,23 +67,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }: AuthProviderPr
     //     authenticateUser({email, password}, toggleLoading, handleUserUpdate)
     // };
 
-    // const checkSession = async () => {
-    //     try {
-    //         const session = await getCurrentSession();
-    //         console.log('Session:', session);
-
-    //         if (!!session && (!user || !isAuthenticated)) {
-    //             setIsAuthenticated(true);
-    //             setUser(User(session));
-    //         }
-    //     } catch (error) {
-    //         console.error('Check Session Error:', error);
-    //         setIsAuthenticated(false);
-    //         setUser(null);
-    //         localStorage.removeItem('session');
-    //     }
-    // };
-
     // const logout = async () => {
     //     setLoading(true);
     //     try {
@@ -114,7 +82,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }: AuthProviderPr
     // };
    
     return (
-        <AuthContext.Provider value={{ authenticating: loading, isAuthenticated, user }}>
+        <AuthContext.Provider value={{ authenticating, currentSession, isAuthenticated, user }}>
             {children}
         </AuthContext.Provider>)
 

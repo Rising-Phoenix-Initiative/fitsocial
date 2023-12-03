@@ -1,10 +1,12 @@
 import { Models } from 'appwrite';
 
-export type UserType = {
+export type UserType = Models.Session & {
     email: string,
 }
 
-const User = (userData: Models.Session|null) => {
+export type UserWrapperInput = Models.Session|null 
+
+const User = async (userData: UserWrapperInput) => {
     console.log('in User wrapper func')
     if (!userData){
         console.log('no userData')
@@ -14,6 +16,7 @@ const User = (userData: Models.Session|null) => {
     console.log({userData})
 
     return {
+        ...userData, 
         email: userData?.providerUid,
     }
 }
