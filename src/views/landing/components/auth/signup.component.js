@@ -10,7 +10,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useAuth } from '../../../../context/auth.context';
+import { signup } from '../../../../features/auth/authService';
 
 const calculatePasswordStrength = (password) => {
     let strength = 0;
@@ -31,8 +31,6 @@ const Signup = () => {
     const [passwordStrength, setPasswordStrength] = useState(0);
     const [selectedDate, setSelectedDate] = useState(null);
     const [openDatePicker, setOpenDatePicker] = useState(false);
-
-    const { signup } = useAuth();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);

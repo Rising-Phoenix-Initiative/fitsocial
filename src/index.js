@@ -1,12 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client'
 import App from './App';
 import { ThemeProvider } from './context/theme.context';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './context/auth.context';
 import PostsProvider from './context/posts.context';
 
-ReactDOM.render(
+const rootElement = document.getElementById('root')
+const root = createRoot(rootElement)
+
+root.render(
   <React.StrictMode>
     <Router>
       <ThemeProvider>
@@ -18,5 +21,4 @@ ReactDOM.render(
       </ThemeProvider>
     </Router>
   </React.StrictMode>,
-  document.getElementById('root')
 );
