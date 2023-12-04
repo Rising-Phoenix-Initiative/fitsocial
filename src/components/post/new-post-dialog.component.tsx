@@ -1,61 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
     Button,
     Box,
     Typography,
     Dialog,
     DialogContent,
-    TextField
-} from '@mui/material';
-import { IconButton, Avatar } from '@mui/material';
-import { PhotoLibrary, GifBox, InsertEmoticon, Send, Close as CloseIcon } from '@mui/icons-material';
-import { usePosts } from '../../context/posts.context';
-import { useAuth } from '../../context/auth.context';
-import { uploadImage } from '../../services/posts.service';
+    TextField,
+    IconButton,
+    Avatar,
+} from "@mui/material";
+import {
+    PhotoLibrary,
+    GifBox,
+    InsertEmoticon,
+    Send,
+    Close as CloseIcon,
+} from "@mui/icons-material";
+import { usePosts } from "../../context/posts.context";
+import { useAuth } from "../../context/auth.context";
+import { uploadImage } from "../../services/posts.service";
 
-
-const NewPostDialog = () => {
-    const [postContent, setPostContent] = useState('');
-    const [error, setError] = useState(null);
+const NewPostDialog: React.FC = () => {
+    const [postContent, setPostContent] = useState<string>("");
+    const [error, setError] = useState<string | null>(null);
 
     const { createPost, submitting, newPostOpen, closeNewPost } = usePosts();
     const { user } = useAuth();
-
+    console.log("user", user);
     const submitPost = async () => {
-        const postData = {
-            text: postContent,
-            userId: user?.$id,
-            name: user?.name,
-            username: user?.username,
+        if (user && user.uid) {
+            try {
+                await createPost(postContent, user.uid);
+                setPostContent("");
+                closeNewPost();
+            } catch (error: any) {
+                setError(error.message);
+            }
         }
+    };
 
-        try {
-            await createPost(postData, user?.$id);
-            setPostContent('');
-            closeNewPost();
-
-        } catch (error) {
-            setError(error.message);
-        }
-    }
-
-    const handleUpload = async (event) => {
-        const file = event.target.files[0];
+    const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
         if (file) {
             try {
                 const result = await uploadImage(file);
                 console.log(result); // Handle the success response
-            } catch (error) {
+            } catch (error: any) {
                 console.error(error); // Handle the error
             }
         }
     };
 
     return (
-        <Dialog PaperProps={{ sx: { backgroundImage: 'none' } }} open={newPostOpen} onClose={closeNewPost} fullWidth maxWidth="sm">
-            <Box display="flex" justifyContent="space-between" alignItems="center" p={2} pb={0}>
-                <Avatar sx={{ backgroundColor: 'background.onSurface', color: 'text.onSurface' }}>VF</Avatar>
-                <IconButton edge="end" color="inherit" onClick={closeNewPost} aria-label="close">
+        <Dialog
+            PaperProps={{ sx: { backgroundImage: "none" } }}
+            open={newPostOpen}
+            onClose={closeNewPost}
+            fullWidth
+            maxWidth="sm"
+        >
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                p={2}
+                pb={0}
+            >
+                <Avatar
+                    sx={{
+                        backgroundColor: "background.onSurface",
+                        color: "text.onSurface",
+                    }}
+                >
+                    VF
+                </Avatar>
+                <IconButton
+                    edge="end"
+                    color="inherit"
+                    onClick={closeNewPost}
+                    aria-label="close"
+                >
                     <CloseIcon />
                 </IconButton>
             </Box>
@@ -72,17 +96,25 @@ const NewPostDialog = () => {
                     multiline
                     rows={4}
                 />
-                {error && <Typography variant="secondary">
-                    {error}
-                </Typography>}
+                {error && <Typography variant="body1">{error}</Typography>}
             </DialogContent>
-            <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
-                <Box display="flex" justifyContent="start" alignItems="center" gap={1}>
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                p={2}
+            >
+                <Box
+                    display="flex"
+                    justifyContent="start"
+                    alignItems="center"
+                    gap={1}
+                >
                     <IconButton
                         sx={{
                             "&:hover": {
-                                color: '#11cc11'
-                            }
+                                color: "#11cc11",
+                            },
                         }}
                         color="inherit"
                         aria-label="upload media"
@@ -98,8 +130,8 @@ const NewPostDialog = () => {
                     <IconButton
                         sx={{
                             "&:hover": {
-                                color: '#11cc11'
-                            }
+                                color: "#11cc11",
+                            },
                         }}
                         color="inherit"
                         aria-label="add gif"
@@ -109,8 +141,8 @@ const NewPostDialog = () => {
                     <IconButton
                         sx={{
                             "&:hover": {
-                                color: '#11cc11'
-                            }
+                                color: "#11cc11",
+                            },
                         }}
                         color="inherit"
                         aria-label="add emoji"
@@ -125,14 +157,14 @@ const NewPostDialog = () => {
                         variant="contained"
                         color="primary"
                         endIcon={<Send />}
-                        sx={{ fontSize: '1rem', fontWeight: '700' }}
+                        sx={{ fontSize: "1rem", fontWeight: "700" }}
                     >
                         Post
                     </Button>
                 </Box>
             </Box>
         </Dialog>
-    )
-}
+    );
+};
 
 export default NewPostDialog;

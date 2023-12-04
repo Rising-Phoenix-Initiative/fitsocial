@@ -35,7 +35,7 @@ type PostProps = {
         userId: string;
         $createdAt: string; // Assuming this is a string representation of a date
         edited?: boolean;
-        $id: string;
+        uid: string;
     };
 };
 
@@ -76,7 +76,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
     //TODO: BUG HERE when deleting a post
     useEffect(() => {
         if (name && user) {
-            if (likeIds.includes(user.$id)) {
+            if (likeIds.includes(user.uid)) {
                 setLiked(true);
             } else {
                 setLiked(false);
@@ -89,16 +89,18 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
     const handleLike = async () => {
         setIsLikeButtonDisabled(true);
-        if (likeIdsState.includes(user.$id)) {
-            setLiked(false);
-            setLikesCount(likesCount - 1); // Decrement likes
-            setLikeIds(likeIdsState.filter((id) => id !== user.$id)); // Remove userId from likeIds
-            await removeLikeFromPost(post.$id, user.$id);
-        } else {
-            setLiked(true);
-            setLikesCount(likesCount + 1); // Increment likes
-            setLikeIds([...likeIdsState, user.$id]); // Add userId to likeIds
-            await addLikeToPost(post.$id, user.$id);
+        if (user) {
+            if (likeIdsState.includes(user.uid)) {
+                setLiked(false);
+                setLikesCount(likesCount - 1); // Decrement likes
+                setLikeIds(likeIdsState.filter((id) => id !== user.uid)); // Remove userId from likeIds
+                await removeLikeFromPost(post.uid, user.uid);
+            } else {
+                setLiked(true);
+                setLikesCount(likesCount + 1); // Increment likes
+                setLikeIds([...likeIdsState, user.uid]); // Add userId to likeIds
+                await addLikeToPost(post.uid, user.uid);
+            }
         }
         setIsLikeButtonDisabled(false);
     };
@@ -108,7 +110,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
         setBookmarked(!bookmarked);
     };
 
-    const handleMenuDropdownOpen = (event) => {
+    const handleMenuDropdownOpen = (event: any) => {
         setMenuDropdownAnchorEl(event.currentTarget);
     };
 
@@ -121,14 +123,19 @@ const Post: React.FC<PostProps> = ({ post }) => {
         setIsEditing(true);
     };
 
-    const handleEditSubmit = async (editedContent) => {
+    const handleEditSubmit = async (
+        editedContent: string,
+        newImageURL?: string
+    ) => {
         setEditSubmitting(true);
-        await updatePost(
-            post.$id,
-            { text: editedContent, edited: true },
-            user.$id
-        );
-        handleEditClose();
+        if (user) {
+            await updatePost(
+                post.uid,
+                { text: editedContent, edited: true },
+                newImageURL
+            );
+            handleEditClose();
+        }
         setEditSubmitting(false);
     };
 
@@ -143,8 +150,10 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
     const handleDeleteSubmit = async () => {
         setDeleteSubmitting(true);
-        await deletePost(post.$id, user.$id);
-        handleDeleteClose();
+        if (user && user.uid === post.userId) {
+            await deletePost(post.uid);
+            handleDeleteClose();
+        }
         setDeleteSubmitting(false);
     };
 
@@ -169,7 +178,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
                     },
                 }}
             >
-                {isLoadingData ? (
+                {isLoadingData || !user ? (
                     <Loader
                         size={50}
                         sx={{
@@ -249,8 +258,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
                                     vertical: "top",
                                 }}
                             >
-                                {console.log("user", user)}
-                                {post.userId === user.$id ? (
+                                {post.userId === user.uid ? (
                                     <>
                                         <MenuItem onClick={handleEdit}>
                                             <ListItemIcon>
@@ -320,13 +328,16 @@ const Post: React.FC<PostProps> = ({ post }) => {
                                         disabled={isLikeButtonDisabled}
                                         onClick={handleLike}
                                         sx={{
-                                            color: liked && "iconHover.heart",
+                                            color: liked
+                                                ? "iconHover.heart"
+                                                : "inherit",
                                             "&:hover": {
                                                 color: "iconHover.heart",
                                             },
                                             "&:disabled": {
-                                                color:
-                                                    liked && "iconHover.heart",
+                                                color: liked
+                                                    ? "iconHover.heart"
+                                                    : "inherit",
                                             },
                                         }}
                                         aria-label="like post"
@@ -335,7 +346,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
                                     </IconButton>
                                     {likesCount}
                                     <IconButton
-                                        icon="comment"
                                         sx={{
                                             ml: 2,
                                             "&:hover": {
@@ -368,9 +378,9 @@ const Post: React.FC<PostProps> = ({ post }) => {
                                         onClick={handleBookmark}
                                         sx={{
                                             ml: 1,
-                                            color:
-                                                bookmarked &&
-                                                "iconHover.general",
+                                            color: bookmarked
+                                                ? "iconHover.general"
+                                                : "inherit",
                                             "&:hover": {
                                                 color: "iconHover.general",
                                             },

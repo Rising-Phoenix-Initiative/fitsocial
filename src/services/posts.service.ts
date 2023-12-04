@@ -14,7 +14,12 @@ import {
     getDoc,
     deleteDoc,
 } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject,
+} from "firebase/storage";
 import { UserDocument } from "../features/user/_types/User";
 
 export type PostDocument = {
@@ -23,7 +28,8 @@ export type PostDocument = {
     userId: string; // Reference to UserDocument's uid
     createdAt: Date;
     updatedAt: Date;
-    content: string;
+    text: string;
+    edited: boolean | false;
     imageUrl?: string | undefined; // URL of an image if the post includes media
     likesCount: number; // Total number of likes
     commentsCount: number; // Total number of comments
@@ -87,7 +93,7 @@ const fetchLikedPosts = async (userId: string) => {
 // Function to create a new post
 const createPost = async (
     userId: string,
-    content: string,
+    text: string,
     file?: File
 ): Promise<PostDocument> => {
     let imageUrl = "";
@@ -102,8 +108,9 @@ const createPost = async (
         userId,
         createdAt: now.toDate(),
         updatedAt: now.toDate(),
-        content,
+        text,
         imageUrl,
+        edited: false,
         likesCount: 0,
         commentsCount: 0,
         likedBy: [],
@@ -128,6 +135,18 @@ const uploadImage = async (file: File): Promise<string> => {
     return downloadURL;
 };
 
+export const deleteOldImage = async (imageUrl: string): Promise<void> => {
+    const imageRef = ref(storage, imageUrl);
+
+    try {
+        await deleteObject(imageRef);
+        console.log("Image successfully deleted from storage.");
+    } catch (error) {
+        console.error("Error deleting image from storage:", error);
+        throw error;
+    }
+};
+
 const getPosts = async (): Promise<PostDocument[]> => {
     const postsSnapshot = await getDocs(collection(db, "posts_collection"));
     return postsSnapshot.docs.map((doc) => ({
@@ -144,7 +163,10 @@ const getPostById = async (postId: string): Promise<PostDocument> => {
 
 const updatePost = async (
     postId: string,
-    content: string,
+    content: {
+        text: string;
+        edited: boolean;
+    },
     imageUrl?: string
 ) => {
     const postRef = doc(db, "posts_collection", postId);

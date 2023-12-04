@@ -1,12 +1,14 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, logoutUser, checkCurrentUser } from "../authService";
-import { UserData, UserType } from "../../user/_types/User";
+import { UserData, UserDocument, UserType } from "../../user/_types/User";
 import { createUser } from "../../../services/users.service";
 import { AuthContextType } from "../../../context/auth.context";
 
 const useAuthProvider = (initialAuthState: AuthContextType) => {
-    const [user, setUser] = useState<UserType | null>(initialAuthState.user);
+    const [user, setUser] = useState<UserDocument | null>(
+        initialAuthState.user
+    );
     const [isAuthenticated, setIsAuthenticated] = useState(
         initialAuthState.isAuthenticated
     );
@@ -17,6 +19,7 @@ const useAuthProvider = (initialAuthState: AuthContextType) => {
         setLoading(true);
         try {
             const sessionData = await checkCurrentUser();
+            console.log("sessionData", sessionData);
             if (sessionData) {
                 setIsAuthenticated(true);
                 setUser(sessionData.user);

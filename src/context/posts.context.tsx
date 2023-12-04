@@ -19,7 +19,8 @@ type PostsContextType = {
     fetchPostById: (postId: string) => Promise<void>;
     updatePost: (
         postId: string,
-        postContent: postService.PostDocument
+        postContent: { text: string; edited: boolean },
+        newImageURL?: string
     ) => Promise<void>;
     deletePost: (postId: string) => Promise<void>;
     addLikeToPost: (postId: string, userId: string) => Promise<void>;
@@ -105,13 +106,14 @@ const PostsProvider: FC<PostsProviderProps> = ({ children }) => {
 
     const updatePost = async (
         postId: string,
-        postContent: postService.PostDocument
+        postContent: { text: string; edited: boolean },
+        newImageURL?: string
     ) => {
         try {
             const updatedPost = await postService.updatePost(
                 postId,
-                postContent.content,
-                postContent.imageUrl
+                { text: postContent.text, edited: true },
+                newImageURL
             );
             setPosts(
                 posts.map((post) => (post.id === postId ? updatedPost : post))

@@ -99,8 +99,16 @@ const Signup: React.FC = () => {
             birthdate: new Date(),
         },
         validationSchema,
-        onSubmit: (values) => {
-            signup({ ...values, birthdate: selectedDate || new Date() });
+        onSubmit: async (values) => {
+            try {
+                console.log("values", values);
+                await signup({
+                    ...values,
+                    birthdate: selectedDate || new Date(),
+                });
+            } catch (error) {
+                console.error("Signup Error:", error);
+            }
         },
     });
 

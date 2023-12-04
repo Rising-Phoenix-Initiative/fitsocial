@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import "firebase/auth";
 import { getUser } from "../../services/users.service";
-import { UserType } from "../user/_types/User";
+import { UserDocument } from "../user/_types/User";
 
 // Login a user
 export const loginUser = async (
@@ -29,13 +29,17 @@ export const loginUser = async (
 
 // Check current session and get user data
 export const checkCurrentUser = async (): Promise<{
-    user: UserType | null;
+    user: UserDocument | null;
 }> => {
     return new Promise((resolve, reject) => {
         onAuthStateChanged(auth, async (user) => {
+            console.log("checkCurrentUser", user);
             if (user) {
                 try {
-                    const userDocument: any = await getUser(user.uid);
+                    const userDocument = (await getUser(
+                        user.uid
+                    )) as UserDocument;
+                    console.log("userDocument: ", userDocument);
                     resolve({ user: userDocument });
                 } catch (error) {
                     reject(error);

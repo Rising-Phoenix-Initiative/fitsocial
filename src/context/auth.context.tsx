@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, FC, useContext } from "react";
-import { UserData, UserType } from "../features/user/_types/User";
+import { UserData, UserDocument } from "../features/user/_types/User";
 import useAuthProvider from "../features/auth/_hooks/useAuthProvider";
 
 type AuthProviderProps = {
@@ -9,10 +9,10 @@ type AuthProviderProps = {
 export type AuthContextType = {
     authenticating: boolean;
     isAuthenticated: boolean;
-    user: UserType | null;
+    user: UserDocument | null;
     login: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
-    signup: (userData: UserData) => Promise<void>; // Use UserData instead of UserType
+    signup: (userData: UserData) => Promise<void>; // Use UserData instead of UserDocument
 };
 
 // Initial State

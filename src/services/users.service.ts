@@ -13,7 +13,7 @@ export const createUser = async (
             userData.email,
             userData.password
         );
-        const userRef = doc(db, "users", userCredential.user.uid);
+        const userRef = doc(db, "users_collection", userCredential.user.uid);
 
         const now = Timestamp.fromDate(new Date());
 
@@ -50,7 +50,7 @@ export const getUser = async (
     userId: string
 ): Promise<UserDocument | undefined> => {
     try {
-        const userRef = doc(db, "users", userId);
+        const userRef = doc(db, "users_collection", userId);
         const userDoc = await getDoc(userRef);
 
         if (userDoc.exists()) {
