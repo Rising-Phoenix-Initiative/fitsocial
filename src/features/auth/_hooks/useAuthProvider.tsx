@@ -1,24 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-    loginUser,
-    logoutUser,
-    getCurrentSession,
-    checkCurrentUser,
-} from "../authService";
-import { UserType } from "../../user/_types/User";
+import { loginUser, logoutUser, checkCurrentUser } from "../authService";
+import { UserData, UserType } from "../../user/_types/User";
 import { createUser } from "../../../services/users.service";
+import { AuthContextType } from "../../../context/auth.context";
 
-type AuthProviderProps = {
-    initialAuthState: {
-        isAuthenticated: boolean;
-        user: UserType | null;
-    };
-};
-
-const useAuthProvider = (initialAuthState: any) => {
-    console.log("initialAuthState 2", initialAuthState);
-    const [user, setUser] = useState<any>({});
+const useAuthProvider = (initialAuthState: AuthContextType) => {
+    const [user, setUser] = useState<UserType | null>(initialAuthState.user);
     const [isAuthenticated, setIsAuthenticated] = useState(
         initialAuthState.isAuthenticated
     );
@@ -28,29 +16,30 @@ const useAuthProvider = (initialAuthState: any) => {
     const checkSession = useCallback(async () => {
         setLoading(true);
         try {
-            const data: any = await checkCurrentUser();
-            if (data.session && data.user) {
-                setTimeout(() => {
-                    setLoading(false);
-                    setIsAuthenticated(true);
-                    setUser(data.user);
-                }, 2000);
+            const sessionData = await checkCurrentUser();
+            if (sessionData) {
+                setIsAuthenticated(true);
+                setUser(sessionData.user);
             } else {
-                setLoading(false);
+                setIsAuthenticated(false);
+                setUser(null);
             }
         } catch (error) {
             console.error("Check Session Error:", error);
+        } finally {
             setLoading(false);
         }
     }, []);
 
+    useEffect(() => {
+        checkSession();
+    }, [checkSession]);
+
     const login = async (email: string, password: string) => {
         setLoading(true);
         try {
-            const session: any = await loginUser({ email, password });
-            localStorage.setItem("session", JSON.stringify(session));
-            checkSession();
-            navigate("/");
+            await loginUser(email, password);
+            await checkSession();
         } catch (error) {
             console.error("Login Error:", error);
         } finally {
@@ -58,18 +47,15 @@ const useAuthProvider = (initialAuthState: any) => {
         }
     };
 
-    const signup = async (userData: UserType) => {
+    const signup = async (userData: UserData) => {
+        setLoading(true);
         try {
-            const { userCreationResponse, documentCreationResponse } =
-                await createUser(userData);
-            if (userCreationResponse && documentCreationResponse) {
-                await loginUser({
-                    email: userData.email,
-                    password: userData.password,
-                });
-            }
+            await createUser(userData);
+            await login(userData.email, userData.password);
         } catch (error) {
             console.error("Signup Error:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -87,10 +73,6 @@ const useAuthProvider = (initialAuthState: any) => {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        checkSession();
-    }, [checkSession]);
 
     return {
         user,

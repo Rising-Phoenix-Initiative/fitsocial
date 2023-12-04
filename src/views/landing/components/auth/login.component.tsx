@@ -11,10 +11,11 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { loginUser } from "../../../../features/auth/authService";
 import { LoginType } from "../../../../features/auth/_types/Login";
+import { useAuth } from "../../../../context/auth.context";
 
 const Login = () => {
+    const { login, isAuthenticated, authenticating } = useAuth();
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => {
@@ -33,7 +34,7 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: ({ email, password }: LoginType) => {
-            loginUser({ email, password });
+            login(email, password);
         },
     });
 
@@ -105,6 +106,7 @@ const Login = () => {
                 <Button
                     type="submit"
                     fullWidth
+                    disabled={authenticating}
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                 >
