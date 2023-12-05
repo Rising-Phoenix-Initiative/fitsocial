@@ -54,7 +54,7 @@ const maxDate = new Date(
 );
 
 const Signup: React.FC = () => {
-    const { signup } = useAuth();
+    const { handleSignup } = useAuth();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] =
         useState<boolean>(false);
@@ -102,7 +102,7 @@ const Signup: React.FC = () => {
         onSubmit: async (values) => {
             try {
                 console.log("values", values);
-                await signup({
+                await handleSignup({
                     ...values,
                     birthdate: selectedDate || new Date(),
                 });

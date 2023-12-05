@@ -15,7 +15,7 @@ import { LoginType } from "../../../../features/auth/_types/Login";
 import { useAuth } from "../../../../context/auth.context";
 
 const Login = () => {
-    const { login, isAuthenticated, authenticating } = useAuth();
+    const { handleLogin, authenticating } = useAuth();
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => {
@@ -34,7 +34,7 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: ({ email, password }: LoginType) => {
-            login(email, password);
+            handleLogin({email, password});
         },
     });
 

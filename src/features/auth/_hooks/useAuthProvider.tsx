@@ -4,6 +4,7 @@ import { loginUser, logoutUser, checkCurrentUser } from "../authService";
 import { UserData, UserDocument, UserType } from "../../user/_types/User";
 import { createUser } from "../../../services/users.service";
 import { AuthContextType } from "../../../context/auth.context";
+import { LoginType } from "../_types/Login";
 
 const useAuthProvider = (initialAuthState: AuthContextType) => {
     const [user, setUser] = useState<UserDocument | null>(
@@ -12,7 +13,7 @@ const useAuthProvider = (initialAuthState: AuthContextType) => {
     const [isAuthenticated, setIsAuthenticated] = useState(
         initialAuthState.isAuthenticated
     );
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const checkSession = useCallback(async () => {
@@ -34,14 +35,22 @@ const useAuthProvider = (initialAuthState: AuthContextType) => {
         }
     }, []);
 
-    useEffect(() => {
-        checkSession();
-    }, [checkSession]);
-
-    const login = async (email: string, password: string) => {
+    const handleSignup = async (userData: UserData) => {
         setLoading(true);
         try {
-            await loginUser(email, password);
+            await createUser(userData);
+            await handleLogin({email: userData.email, password: userData.password});
+        } catch (error) {
+            console.error("Signup Error:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleLogin = async ({email, password }: LoginType) => {
+        setLoading(true);
+        try {
+            await loginUser({email, password});
             await checkSession();
         } catch (error) {
             console.error("Login Error:", error);
@@ -50,19 +59,7 @@ const useAuthProvider = (initialAuthState: AuthContextType) => {
         }
     };
 
-    const signup = async (userData: UserData) => {
-        setLoading(true);
-        try {
-            await createUser(userData);
-            await login(userData.email, userData.password);
-        } catch (error) {
-            console.error("Signup Error:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const logout = async () => {
+    const handleLogout = async () => {
         setLoading(true);
         try {
             await logoutUser();
@@ -77,13 +74,18 @@ const useAuthProvider = (initialAuthState: AuthContextType) => {
         }
     };
 
+    useEffect(() => {
+        checkSession();
+    }, [checkSession]);
+
+
     return {
         user,
         isAuthenticated,
         authenticating: loading,
-        login,
-        logout,
-        signup,
+        handleLogin,
+        handleLogout,
+        handleSignup,
         checkSession,
     };
 };

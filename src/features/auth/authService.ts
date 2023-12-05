@@ -9,12 +9,10 @@ import {
 import "firebase/auth";
 import { getUser } from "../../services/users.service";
 import { UserDocument } from "../user/_types/User";
+import { LoginType } from "./_types/Login";
 
 // Login a user
-export const loginUser = async (
-    email: string,
-    password: string
-): Promise<User> => {
+export const loginUser = async ({ email, password }: LoginType): Promise<User> => {
     try {
         const userCredential: UserCredential = await signInWithEmailAndPassword(
             auth,
