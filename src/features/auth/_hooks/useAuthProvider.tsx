@@ -20,12 +20,12 @@ const useAuthProvider = (initialAuthState: AuthContextType) => {
         try {
             const sessionData = await checkCurrentUser();
             console.log("sessionData", sessionData);
-            if (sessionData) {
-                setIsAuthenticated(true);
+            if (sessionData.user) {
                 setUser(sessionData.user);
+                setIsAuthenticated(true);
             } else {
-                setIsAuthenticated(false);
                 setUser(null);
+                setIsAuthenticated(false);
             }
         } catch (error) {
             console.error("Check Session Error:", error);
