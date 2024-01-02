@@ -6,7 +6,6 @@ import {
     UserCredential,
     User,
 } from "firebase/auth";
-import "firebase/auth";
 import { getUser } from "../../services/users.service";
 import { UserDocument } from "../user/_types/User";
 import { LoginType } from "./_types/Login";
